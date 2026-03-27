@@ -1,0 +1,574 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  /* CONFIG STYLE */
+  body {
+    @apply m-0 bg-bg-primary p-0 font-urbanist text-base font-normal text-text-primary antialiased transition-all duration-100 ease-linear;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  :root {
+    --sidebar-height: 60px;
+    --sidebar-width: min(78vw, 280px);
+    --sidebar-width-md: 260px;
+    --sidebar-width-lg: 280px;
+    --sidebar-width-xl: 280px;
+    --sidebar-width-2xl: 300px;
+    --chat-width-lg: 620px;
+    --chat-width-2xl: 700px;
+  }
+
+  *,
+  *::before,
+  *::after {
+    @apply m-0 box-border p-0;
+  }
+
+  ::-webkit-scrollbar {
+    @apply h-4 w-2;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-scroll-thumb;
+  }
+}
+
+@layer components {
+  /* CONFIG STYLE */
+  .container {
+    @apply m-auto w-[90%] max-w-[90%] overflow-hidden md:w-4/5 lg:w-[90%] 2xl:w-[1500px];
+  }
+
+  .page-card {
+    @apply rounded-[28px] border border-border-primary bg-white/85 shadow-sm shadow-slate-200/70 backdrop-blur-sm;
+  }
+
+  .routes {
+    @apply mt-20;
+  }
+
+  .title {
+    @apply text-2xl font-semibold first-letter:capitalize;
+  }
+
+  /* NAVBAR TOGGLER */
+  .toggler {
+    @apply mb-1 h-0.5 w-5 bg-bg-primary transition duration-500 ease-in-out last:mb-0;
+  }
+
+  .change .toggler:nth-child(1) {
+    transform: translate(1px, 6px) rotate(45deg);
+  }
+
+  .change .toggler:nth-child(2) {
+    @apply opacity-0;
+  }
+
+  .change .toggler:nth-child(3) {
+    transform: translate(0px, -6px) rotate(-45deg);
+  }
+
+  /* TEXT */
+  .text-style {
+    @apply text-text-primary;
+  }
+
+  /* FORM STYLE */
+  /* input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: inherit;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: inset 0 0 20px 20px inherit;
+  } */
+
+  .input-group {
+    @apply mb-4;
+  }
+
+  .input-group label {
+    @apply mb-2 block text-sm font-semibold capitalize text-label-primary;
+  }
+
+  .input-style {
+    @apply app-control-shell /* Disabled */ /* Placeholder */ relative flex h-[44px] w-full items-center px-4 py-3 outline-none placeholder:font-light placeholder:text-placeholder-primary focus:border-slate-400 focus:ring-4 focus:ring-slate-200/70 disabled:rounded-[4px] disabled:border disabled:border-disabled-primary disabled:bg-disabled-primary disabled:p-4 disabled:py-6;
+  }
+
+  .input-group textarea.input-style {
+    @apply h-auto;
+  }
+
+  .input-group .required-mark {
+    @apply text-red-500;
+  }
+
+  .input-group.error .input-style {
+    @apply border-red-500 placeholder-red-300;
+  }
+
+  .input-group.error label {
+    @apply text-red-500;
+  }
+
+  .input-group.error .error-message {
+    @apply ml-1 text-xs text-red-500;
+  }
+
+  input[type="checkbox"].input-style,
+  input[type="radio"].input-style {
+    @apply h-4 w-4 rounded p-0 accent-accent-primary;
+  }
+
+  /* ICONS */
+  .icon-style {
+    @apply flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full border text-base font-semibold transition-all duration-200 ease-in-out;
+  }
+
+  /* BUTTON */
+  .btn {
+    @apply inline-flex h-[48px] cursor-pointer items-center justify-center gap-2 rounded-[10px] bg-btn-primary px-8 py-4 text-center text-base font-semibold leading-5 !text-white shadow-sm shadow-slate-300/40 outline-none transition-all duration-200 ease-in-out hover:scale-[0.985] hover:shadow-md;
+  }
+
+  .btn-xs {
+    @apply btn h-[32px] px-6 py-2 text-sm;
+  }
+
+  .btn-sm {
+    @apply btn h-[40px] px-6 py-3 text-sm;
+  }
+
+  .btn-md {
+    @apply btn h-[48px] px-8 py-3.5 text-base;
+  }
+
+  .btn-lg {
+    @apply btn h-[64px] px-8 py-5 text-xl;
+  }
+
+  /* BUTTON COLORS */
+  .btn-default {
+    @apply border border-border-primary bg-white !text-text-primary transition-all duration-300 hover:bg-slate-100;
+  }
+  .btn-primary {
+    @apply border border-slate-900 bg-btn-primary !text-white transition-all duration-300 hover:bg-slate-800;
+  }
+
+  .btn-primary-inverse {
+    @apply border border-border-primary bg-bg-primary !text-text-primary opacity-95 transition-all duration-300 hover:bg-gray-100;
+  }
+
+  .btn-success {
+    @apply bg-green-500 !text-text-primary transition-all duration-300 hover:bg-green-600;
+  }
+
+  .btn-success-inverse {
+    @apply border border-green-500 bg-green-50 !text-green-500 transition-all duration-300 hover:bg-green-100;
+  }
+
+  .btn-danger {
+    @apply border border-red-700 bg-red-600 !text-white transition-all duration-300 hover:bg-red-700;
+  }
+
+  .btn-danger-inverse {
+    @apply border border-red-500 bg-red-50 !text-red-500 transition-all duration-300 hover:bg-red-100;
+  }
+
+  .btn-warning {
+    @apply bg-yellow-500 !text-text-primary transition-all duration-300 hover:bg-yellow-600;
+  }
+
+  .btn-warning-inverse {
+    @apply border border-yellow-500 bg-yellow-50 !text-yellow-500 transition-all duration-300 hover:bg-yellow-100;
+  }
+
+  .btn-info {
+    @apply bg-blue-500 !text-text-primary transition-all duration-300 hover:bg-blue-600;
+  }
+
+  .btn-info-inverse {
+    @apply border border-blue-500 bg-blue-50 !text-blue-500 transition-all duration-300 hover:bg-blue-100;
+  }
+
+  .btn-primary {
+    @apply border border-slate-900 bg-btn-primary !text-white transition-all duration-300 hover:bg-slate-800;
+  }
+
+  /* SIZES */
+  .xs {
+    @apply h-4 w-4;
+  }
+
+  .sm {
+    @apply h-5 w-5;
+  }
+
+  .md {
+    @apply h-6 w-6;
+  }
+
+  .lg {
+    @apply h-8 w-8;
+  }
+
+  .xl {
+    @apply h-10 w-10;
+  }
+
+  .xxl {
+    @apply h-12 w-12;
+  }
+
+  /* BADGE */
+  .badge {
+    @apply rounded-full px-2 py-1 text-xs font-medium;
+  }
+
+  .badge-default {
+    @apply border border-border-primary bg-slate-100 text-text-primary;
+  }
+
+  .badge-primary {
+    @apply bg-blue-500 text-text-primary;
+  }
+
+  .badge-success {
+    @apply bg-green-500 text-text-primary;
+  }
+
+  .badge-danger {
+    @apply bg-red-500 text-text-primary;
+  }
+
+  .badge-warning {
+    @apply bg-yellow-500 text-text-primary;
+  }
+
+  .badge-info {
+    @apply bg-blue-500 text-text-primary;
+  }
+
+  .badge-primary {
+    @apply bg-primary border text-text-primary;
+  }
+
+  .icon-button {
+    @apply z-10 text-text-icon;
+  }
+}
+
+@layer utilities {
+  /* NAVIGATION TOGGLER */
+  .open-navbar {
+    @apply left-0 transition-[left] duration-500 ease-in-out lg:left-0;
+  }
+
+  /* VUE TRANSITIONS */
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity ease-in-out 0.3s;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
+  .zoom-enter-active,
+  .zoom-leave-active {
+    transition: transform ease-in-out 0.3s;
+  }
+
+  .zoom-enter-from,
+  .zoom-leave-to {
+    transform: scale(0);
+  }
+
+  /* PRIME VUE CUSTOMIZATIONS */
+  /* DROPDOWN */
+  .dropdown {
+    @apply input-style !p-0 ring-0;
+  }
+  .dropdown-text {
+    @apply text-text-primary;
+  }
+  .dropdown-filter-input {
+    @apply dropdown-text h-[42px] rounded-[10px] border border-border-primary bg-filter-primary px-4 focus:border-slate-400 focus:ring-0;
+  }
+  .dropdown-icon {
+    @apply xs absolute top-1/2 -translate-y-1/2;
+  }
+  .dropdown-item {
+    @apply dropdown-text bg-input-primary px-4 py-2.5 !text-text-primary hover:bg-selected-hover;
+  }
+
+  .dropdown-item-selected {
+    @apply dropdown-text bg-selected-primary;
+  }
+
+  /* DROPDOWN - MULTISELECT */
+  .dropdown-checkbox-container {
+    @apply rounded-md bg-gray-300;
+  }
+  .dropdown-checkbox {
+    @apply bg-gray-300;
+  }
+  .dropdown-token {
+    @apply rounded-full border border-border-primary bg-slate-100 px-2.5;
+  }
+  .dropdown-token-label {
+    @apply pr-1 text-text-primary;
+  }
+  .dropdown-token-icon {
+    @apply text-text-primary;
+  }
+
+  .app-control-shape {
+    @apply !min-h-[44px] !rounded-[10px];
+  }
+
+  .app-control-surface {
+    @apply border border-border-primary bg-white/90 text-text-primary shadow-sm shadow-slate-200/40 transition-all duration-200 ease-in-out;
+  }
+
+  .app-control-shell {
+    @apply app-control-shape app-control-surface w-full;
+  }
+
+  .app-control-input {
+    @apply !min-h-[44px] w-full border-0 bg-transparent px-4 py-3 text-sm text-text-primary outline-none ring-0 placeholder:text-placeholder-primary;
+  }
+
+  .app-field-control,
+  .p-inputtext,
+  .p-password-input {
+    @apply app-control-shell;
+  }
+
+  .app-field-control:hover,
+  .p-inputtext:hover,
+  .p-password-input:hover {
+    @apply border-slate-400;
+  }
+
+  .app-field-control:focus-within,
+  .p-inputtext:focus,
+  .p-password-input:focus {
+    @apply border-slate-400 ring-4 ring-slate-200/70;
+  }
+
+  .p-select-overlay,
+  .p-multiselect-overlay,
+  .p-autocomplete-overlay,
+  .p-dialog,
+  .p-confirm-popup {
+    @apply rounded-2xl border border-border-primary bg-white text-text-primary shadow-[0_20px_55px_rgba(15,23,42,0.14)];
+  }
+
+  .p-select-label,
+  .p-multiselect-label,
+  .p-autocomplete-input,
+  .p-inputnumber-input,
+  .p-inputtext,
+  .p-password-input {
+    @apply text-sm text-text-primary placeholder:text-placeholder-primary;
+  }
+
+  .p-select-label,
+  .p-multiselect-label {
+    @apply app-control-input;
+  }
+
+  .p-inputnumber-input {
+    @apply app-control-input;
+  }
+
+  .p-select-dropdown,
+  .p-multiselect-dropdown,
+  .p-autocomplete-dropdown {
+    @apply h-full px-3 text-text-icon;
+  }
+
+  .p-multiselect-token {
+    @apply rounded-full border border-border-primary bg-slate-100 px-2.5 py-1 text-text-primary;
+  }
+
+  .p-autocomplete-input-multiple {
+    @apply min-h-[44px] gap-2 px-3 py-2;
+  }
+
+  .p-autocomplete-input {
+    @apply app-control-input;
+  }
+
+  .p-autocomplete-loader {
+    @apply text-text-icon;
+  }
+
+  .p-select-option,
+  .p-multiselect-option,
+  .p-autocomplete-option {
+    @apply px-4 py-2.5 text-sm text-text-primary transition hover:bg-link-primary;
+  }
+
+  .p-select-option.p-select-option-selected,
+  .p-multiselect-option.p-multiselect-option-selected,
+  .p-autocomplete-option[aria-selected="true"] {
+    @apply bg-selected-primary font-medium;
+  }
+
+  .app-field-control--with-prepend .p-select-label,
+  .app-field-control--with-prepend .p-multiselect-label,
+  .app-field-control--with-prepend .p-inputnumber-input,
+  .app-field-control--with-prepend .p-autocomplete-input {
+    @apply pl-10;
+  }
+
+  .app-field-control--with-append .p-select-label,
+  .app-field-control--with-append .p-multiselect-label,
+  .app-field-control--with-append .p-inputnumber-input,
+  .app-field-control--with-append .p-autocomplete-input {
+    @apply pr-10;
+  }
+
+  .app-field-control--autocomplete .p-autocomplete-input-multiple,
+  .app-field-control--multiple .p-autocomplete-input-multiple {
+    @apply app-control-shape items-center border-0 bg-transparent px-3 py-2 shadow-none ring-0;
+  }
+
+  .app-field-control--autocomplete .p-autocomplete-chip,
+  .app-field-control--multiple .p-autocomplete-chip {
+    @apply rounded-full border border-border-primary bg-slate-100 px-2.5 py-1 text-sm text-text-primary;
+  }
+
+  .app-field-control--number .p-inputnumber-input {
+    @apply rounded-[10px];
+  }
+
+  .app-field-control .p-select-label,
+  .app-field-control .p-multiselect-label,
+  .app-field-control .p-inputnumber-input,
+  .app-field-control .p-autocomplete-input,
+  .app-field-control .p-autocomplete-input-multiple {
+    @apply border-0 shadow-none ring-0;
+  }
+
+  .input-group.error .app-field-control,
+  .input-group.error .p-inputtext,
+  .input-group.error .p-password-input {
+    @apply border-red-500;
+  }
+
+  .p-toggleswitch {
+    @apply align-middle;
+  }
+
+  body > [aria-live="assertive"] {
+    z-index: 1700 !important;
+  }
+
+  body > #modals {
+    position: relative;
+    z-index: 1600 !important;
+  }
+
+  #ModalBase {
+    z-index: 1650 !important;
+  }
+
+  body > [aria-live="assertive"] .dark\:bg-gray-800,
+  #ModalBase .dark\:bg-gray-800,
+  body > #modals .dark\:bg-gray-800 {
+    background-color: rgba(255, 255, 255, 0.98) !important;
+  }
+
+  body > [aria-live="assertive"] .dark\:bg-green-900,
+  #ModalBase .dark\:bg-green-900,
+  body > #modals .dark\:bg-green-900 {
+    background-color: #dcfce7 !important;
+  }
+
+  body > [aria-live="assertive"] .dark\:bg-blue-900,
+  #ModalBase .dark\:bg-blue-900,
+  body > #modals .dark\:bg-blue-900 {
+    background-color: #dbeafe !important;
+  }
+
+  body > [aria-live="assertive"] .dark\:bg-yellow-900,
+  #ModalBase .dark\:bg-yellow-900,
+  body > #modals .dark\:bg-yellow-900 {
+    background-color: #fef3c7 !important;
+  }
+
+  body > [aria-live="assertive"] .dark\:bg-red-900,
+  #ModalBase .dark\:bg-red-900,
+  body > #modals .dark\:bg-red-900 {
+    background-color: #fee2e2 !important;
+  }
+
+  body > [aria-live="assertive"] .dark\:text-gray-300,
+  body > [aria-live="assertive"] .dark\:text-gray-400,
+  #ModalBase .dark\:text-gray-300,
+  #ModalBase .dark\:text-gray-400,
+  body > #modals .dark\:text-gray-300,
+  body > #modals .dark\:text-gray-400 {
+    color: #334155 !important;
+  }
+
+  body > [aria-live="assertive"] .dark\:border-gray-600,
+  #ModalBase .dark\:border-gray-600,
+  body > #modals .dark\:border-gray-600 {
+    border-color: #d7dee7 !important;
+  }
+
+  body > [aria-live="assertive"] .dark\:ring-offset-gray-800,
+  #ModalBase .dark\:ring-offset-gray-800,
+  body > #modals .dark\:ring-offset-gray-800 {
+    --tw-ring-offset-color: #ffffff !important;
+  }
+
+  #ModalBase [class*="dark:bg-gray-800"],
+  body > [aria-live="assertive"] [class*="dark:bg-gray-800"] {
+    background-color: rgba(255, 255, 255, 0.98) !important;
+  }
+
+  #ModalBase [class*="dark:bg-red-900"],
+  body > [aria-live="assertive"] [class*="dark:bg-red-900"] {
+    background-color: #fee2e2 !important;
+  }
+
+  #ModalBase [class*="dark:bg-blue-900"],
+  body > [aria-live="assertive"] [class*="dark:bg-blue-900"] {
+    background-color: #dbeafe !important;
+  }
+
+  #ModalBase [class*="dark:text-gray-300"],
+  #ModalBase [class*="dark:text-gray-400"],
+  body > [aria-live="assertive"] [class*="dark:text-gray-300"],
+  body > [aria-live="assertive"] [class*="dark:text-gray-400"] {
+    color: #334155 !important;
+  }
+
+  #ModalBase button[class*="bg-white"][class*="text-gray-700"] {
+    background-color: #ffffff !important;
+    color: #334155 !important;
+    border-color: #d7dee7 !important;
+  }
+
+  #ModalBase button[class*="bg-white"][class*="text-gray-700"]:hover {
+    background-color: #f8fafc !important;
+  }
+
+  #ModalBase button[class*="dark:bg-gray-700"][class*="dark:text-gray-400"] {
+    background-color: #ffffff !important;
+    color: #334155 !important;
+    border-color: #d7dee7 !important;
+  }
+}

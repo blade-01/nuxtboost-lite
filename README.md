@@ -1,211 +1,211 @@
-<p align='center'>
-  <img src='public/screenshot.png' alt='Boost your productivity with Vue Boost - work smarter, not harder.'/>
-</p>
-<br/>
+# NuxtBoost
 
-<p align='center'>
-NuxtBoost
-</p>
+NuxtBoost is a Nuxt starter for SaaS dashboards and admin interfaces.
 
-<br>
+It is designed for teams that want to skip repetitive setup work and start from a clean, reusable foundation with:
 
-<p align='center'>
-Inspired by <a href="https://github.com/blade-01/vueboost">Vue Boost</a>
-</p>
+- dashboard shell and navigation
+- auth screens
+- reusable form inputs and validations
+- charts, tables, modals, and feedback flows
+- starter business flows like overview, operations, charts, tables, forms, and modals
 
-<br>
+## What This Starter Includes
 
-<p align='center'>
-<a href="https://nuxt-boost.vercel.app/">Live Demo</a>
-</p>
+### Core stack
 
-<br>
+- Nuxt 4
+- TypeScript
+- Tailwind CSS
+- PrimeVue 4
+- VeeValidate + Yup
+- Nuxt Image
+- Nuxt Icon
+- Sidebase Nuxt Auth
 
-<!-- omit in toc -->
-## Table of Contents
+### UI foundations
 
-- [Features](#features)
-- [Pre-Packed](#pre-packed)
-  - [UI Frameworks](#ui-frameworks)
-  - [Icons](#icons)
-  - [Reuseable Components](#reuseable-components)
-  - [Composables](#composables)
-  - [Nuxt Modules](#nuxt-modules)
-  - [Plugins](#plugins)
-  - [Coding Style](#coding-style)
-  - [DevTools](#dev-tools)
-- [Try It Now!](#try-it-now)
-- [Checklist](#checklist)
-- [Usage](#usage)
-- [Why](#why)
-- [Acknowledgments](#acknowledgments)
+- dashboard layout with responsive sidebar and topbar
+- reusable button, modal, table, and input primitives
+- validated auth pages
+- chart surfaces with Chart.js
+- toast and confirmation flows
 
-## Features
+### Starter pages
 
-- [💚 Nuxt 3](https://nuxt.com/) - SSR, ESR, File-based routing, components auto importing, modules, etc.
+- dashboard overview
+- charts
+- operations flow
+- input reference
+- table reference
+- modal reference
+- button reference
 
-<!-- - ⚡️ Vite - Instant HMR -->
+## Project Structure
 
-<!-- - 📲 [PWA](https://github.com/antfu/vite-plugin-pwa) -->
+```txt
+components/
+  Dashboard/
+  Navigation/
+  Ui/
+composables/
+layouts/
+middleware/
+pages/
+  auth/
+  dashboard/
+plugins/
+server/
+types/
+utils/
+```
 
-- 🎨 [TailwindCSS](https://tailwindcss.com/)
+## Key Reusable Pieces
 
-- 😃 [Use icons from Iconify](https://iconify.design)
+### Components
 
-- 🔥 Use the [new `<script setup>` syntax](https://github.com/vuejs/rfcs/pull/227)
-
-- 📥 APIs auto importing - use Composition API and others directly
-
-- 🧩 [Reuseable Components](#reuseable-components) - a little something to improve productivity
-
-- 🦾 TypeScript, of course
-
-<br>
-
-## Pre-packed
-
-### UI Frameworks
-
-- [Prime Vue](https://primevue.org/) - The Most Complete UI Suite for Vue.js
-- [TailwindCSS](https://tailwindcss.com/) - Rapidly build modern websites without ever leaving your HTML.
-
-### Icons
-
-- [Iconify](https://iconify.design) - use icons from any icon sets [🔍Icônes](https://icones.js.org)
-
-### Reuseable Components
-
-- [Parent Folder](/components/Ui/)
-  - [Button](/components/Ui/Btn/index.vue) - Reusable button component
-  - [Input](/components/Ui/Input/Field.vue) - Form input component (Types: text, email, textarea etc.)
-  - [File](/components/Ui/Input/File.vue) - File upload component
-  - [Textarea](/components/Ui/Input/Password.vue) - Textarea component
-  - [Phone](/components/Ui/Input/Phone.vue) - Phone number validation component
-  - [Dropdown](/components/Ui/Input/Dropdown.vue) - Dropdown component
-  - [MultiSelect](/components/Ui/Input/MultiSelect.vue) - MultiSelect component
-  - [Number](/components/Ui/Input/Number.vue) - Number Input component
-  - [Radiobutton](/components/Ui/Input/Radiobutton.vue) - Radio Button component
-  - [Switch](/components/Ui/Input/Switch.vue) - Switch component
-  - [Checkbox](/components/Ui/Input/Checkbox.vue) - Checkbox component
-  - [DatePicker](/components/Ui/Input/DatePicker.vue) - Date Picker component
-  - [Table](/components/Ui/Data/Table.vue) - Data table component
-  - [Modal](/components/Ui/Modal.vue) - Reusable modal component
-    - [Side](/components/Ui/Modal/Side.vue) - Side modal component (left, right, top, bottom)
-    - [Center](/components/Ui/Modal/Center.vue) - Center modal component
-- [Samples Folder](/pages/dashboard/)
-  - You can find out how to use these components by clicking [Dashboard Folder](/pages/dashboard/) or visit [NuxtBoost Dashboard](https://nuxt-boost.vercel.app) for the visualization
+- `components/Ui/Btn/index.vue`
+- `components/Ui/Data/Table.vue`
+- `components/Ui/Input/*`
+- `components/Ui/Modal/*`
+- `components/Dashboard/PageHero.vue`
+- `components/Dashboard/StarterPanel.vue`
 
 ### Composables
 
-- [Utils](/utils/index.ts) - Main utility has encompasses basic day-to-day functions.
-- [PrimeVue Styles](/composables/usePvStyle.ts) - PrimeVue styling composable.
-- [Shortcut Keys](/composables/useShortcut.ts) - Shortcut composable (save, esc etc...), an example of this can be seen on dashboard collapsible.
-- [Sidebar](/composables/useSidebarUtils.ts) - Dashboard sidebar composable.
-- [Validation Schema](/composables/useValidations.ts) - VeeValidate validation schemas composable.
+- `composables/useAppFeedback.ts`
+- `composables/useFetchApi.ts`
+- `composables/usePvStyle.ts`
+- `composables/useSidebarUtils.ts`
+- `composables/useShortcut.ts`
+- `composables/useValidations.ts`
 
-### Nuxt Modules
+### Utilities
 
-- [Nuxt Devtools](https://nuxt.com/modules/devtools) - Unleash Nuxt Developer Experience.
-- [VueUse](https://nuxt.com/modules/vueuse) - Collection of Vue Composition Utilities.
-- [TailwindCSS](https://nuxt.com/modules/tailwindcss) - Add Tailwind CSS to your Nuxt application in seconds with PurgeCSS included for minimal CSS.
-- [Nuxt Icon](https://nuxt.com/modules/icon) - Icon module for Nuxt with 100,000+ ready to use icons from Iconify.
-- [Nuxt Image](https://nuxt.com/modules/image) - Optimised images for Nuxt, with progressive processing, lazy-loading, real-time resizes and providers support.
+- `utils/index.ts`
 
-### Plugins
+## Getting Started
 
-- [PrimeVue](https://primevue.org/) - The Most Complete UI Suite for Vue.js.
-- [VeeValidate](https://vee-validate.logaretm.com/v4/) - Painless Vue forms.
-- [Vue Tel Input](https://vue-tel-input.iamstevendao.com/guide/getting-started.html) - International Telephone Input with Vue
-
-### Coding Style
-
-- Use Composition API with [`<script setup>` SFC syntax](https://github.com/vuejs/rfcs/pull/227)
-- [ESLint](https://eslint.org/).
-
-### Dev tools
-
-- [Nuxt Dev tools](https://nuxt.com/modules/devtools)
-- [TypeScript](https://www.typescriptlang.org/)
-- [VS Code Extensions](./.vscode/extensions.json)
-  - [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) - Vue 3 `<script setup>` IDE support
-  - [Iconify IntelliSense](https://marketplace.visualstudio.com/items?itemName=antfu.iconify) - Icon inline display and autocomplete
-  - [Tailwind IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) - Icon inline display and autocomplete
-  - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-
-## Try it now!
-
-### GitHub Template
-
-[Create a repo from this template on GitHub](https://github.com/blade-01/NuxtBoost/generate).
-
-### Clone to local
-
-If you prefer to do it manually with the cleaner git history
+Install dependencies:
 
 ```bash
-npx degit blade-01/nuxtboost my-template
-cd my-template
-pnpm i or yarn i # If you don't have pnpm installed, run: npm install -g pnpm
+yarn install
 ```
 
-## Checklist
-
-When you use this template, try follow the checklist to update your info properly
-
-- [ ] Change the title and configurations in `nuxt.config.ts`
-- [ ] Change the favicon in `public`
-- [ ] Clean up the READMEs and remove routes
-
-And, enjoy :)
-
-## Usage
-
-### Development
-
-Just run and visit http://localhost:3000
-
-```bash
-pnpm dev
-```
-
-OR
+Start development:
 
 ```bash
 yarn dev
 ```
 
-### Build
-
-To build the App, run
-
-```bash
-pnpm build
-```
-
-OR
+Build for production:
 
 ```bash
 yarn build
 ```
 
-And you will see the generated file in `dist` that is ready to be served.
+Run linting:
 
-### Deploy
+```bash
+yarn lint
+```
 
-Deploy anywhere.
+Run auto-fixes:
 
-## Why
+```bash
+yarn lint:fix
+yarn format
+```
 
-To boost our collective productivity as developers.
+Run verification checks:
 
+```bash
+yarn format:check
+yarn typecheck
+```
 
-## Acknowledgments
+Preview production output:
 
-I would like to express my gratitude to the following individuals:
+```bash
+yarn preview
+```
 
-- **Jahid Anowar**: In memory of my dear mentor, a friend, and a remarkable leader, whose guidance and support have been an unwavering pillar in my journey as a developer. Whenever I stumbled into coding challenges, [Jahid](https://jahid.dev/) was the guiding light, offering invaluable insights and solutions. His mentorship went beyond just coding; he generously shared his wisdom, helped me secure job opportunities, and imparted invaluable lessons that shaped my career. His commitment to excellence was tireless, evident in every project he touched. Much of the essence embedded within this project was inspired by the profound wisdom I gained while working alongside him on his codebase. His profound impact on my career cannot be overstated; he has forever shaped my trajectory. Rest in peace, my Nuxt Wizard. Your legacy will endure, and your teachings will continue to guide me forward 🖤
+## Documentation
 
-- **Friends and Family**: This wouldn't have been possible without support from friends and family, I really appreciate y'all.
+Project documentation for developers working on the dashboard lives here:
 
-- **Myself**: Lastly, I want to thank [me](https://www.youtube.com/watch?v=wGRF3GQ4Wdk).
-# nuxtboost-lite
+- `docs/dashboard-development-guide.md`
+
+That guide covers:
+
+- file structure
+- naming rules
+- composables and shared patterns
+- role access conventions
+- validation rules
+- how to add new dashboard pages
+- how to switch the project from overview-first to auth-first
+
+Contributor workflow and repository rules live here:
+
+- `CONTRIBUTING.md`
+
+## Switching The First Page
+
+By default, `/` renders the public overview page in `pages/index.vue`.
+
+If a developer wants the project to open on the sign-in page first, the fastest way is to turn `pages/index.vue` into a redirect:
+
+```vue
+<script setup lang="ts">
+await navigateTo("/auth/signin")
+</script>
+```
+
+That keeps the rest of the auth flow intact while making sign-in the first page a user sees.
+
+## Recommended First Edits
+
+When using this starter for a new product, update these first:
+
+1. `nuxt.config.ts`
+2. `public/` assets and favicon
+3. sidebar links in `composables/useSidebarUtils.ts`
+4. auth and session wiring in `server/api/auth/[...].ts`
+5. decide whether `/` should stay as the overview page or redirect to `/auth/signin`
+6. starter copy and business metrics in `pages/dashboard/*`
+
+## Code Quality Tooling
+
+This repo now includes:
+
+- ESLint with Nuxt-aware flat config
+- Prettier with Tailwind class sorting
+- EditorConfig for base editor consistency
+- Husky + lint-staged for pre-commit formatting and linting
+
+The pre-commit hook runs on staged files only. For a full check, run:
+
+```bash
+yarn lint
+yarn format:check
+yarn typecheck
+yarn build
+```
+
+## Starter Philosophy
+
+This repo is not meant to be a finished SaaS product.
+
+It is meant to provide:
+
+- consistent UI primitives
+- sensible route structure
+- production-leaning starter pages
+- reusable validation and feedback patterns
+- a cleaner starting point than a blank Nuxt app
+
+## Notes
+
+- The repo currently builds successfully with `yarn build`.
+- There are still some non-blocking upstream warnings during build, including the `fs.Stats` deprecation from the vee-validate dependency chain and bundle-size warnings for larger chunks.
