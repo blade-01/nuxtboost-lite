@@ -110,7 +110,7 @@ export default defineNuxtConfig({
    * nuxt-auth configuration
    */
   auth: {
-    baseURL: process.env.AUTH_BASE_URL,
+    baseURL: process.env.AUTH_ORIGIN,
     provider: {
       type: "authjs"
     }

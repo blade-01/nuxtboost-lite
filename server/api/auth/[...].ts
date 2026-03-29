@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import ApiRoutes from "~~/constant/ApiRoutes"
 import useFetchApi from "~/composables/useFetchApi"
 import type { AuthUserDataResponse } from "~/types/AuthUser"
+import type { SignInResponse } from "~/types/SignInResponse"
 
 const getUserData = async (token: string): Promise<Pick<AuthUserDataResponse, "data">> => {
   const user = await useFetchApi().rawFetch<AuthUserDataResponse>(ApiRoutes.user.me, {
@@ -84,7 +85,6 @@ export default NuxtAuthHandler({
       }
       return token
     },
-    // @ts-expect-error next-auth session type is extended at runtime
     async session({ session, token }) {
       try {
         const newData = await getUserData(token.accessToken as string)
