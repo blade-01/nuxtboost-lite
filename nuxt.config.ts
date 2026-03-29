@@ -8,7 +8,7 @@ export default defineNuxtConfig({
         { charset: "utf-8" },
         {
           name: "description",
-          content: "NuxtBoost is a reusable Nuxt starter for SaaS dashboards and admin interfaces."
+          content: "NuxtBoost is a Nuxt starter for SaaS dashboards and admin interfaces."
         },
         {
           property: "og:type",
@@ -24,7 +24,7 @@ export default defineNuxtConfig({
         },
         {
           property: "og:description",
-          content: "NuxtBoost is a reusable Nuxt starter for SaaS dashboards and admin interfaces."
+          content: "NuxtBoost is a Nuxt starter for SaaS dashboards and admin interfaces."
         },
         {
           property: "og:image",
@@ -44,7 +44,7 @@ export default defineNuxtConfig({
         },
         {
           property: "twitter:description",
-          content: "NuxtBoost is a reusable Nuxt starter for SaaS dashboards and admin interfaces."
+          content: "NuxtBoost is a Nuxt starter for SaaS dashboards and admin interfaces."
         },
         {
           property: "twitter:image",
