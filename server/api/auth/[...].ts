@@ -77,35 +77,56 @@ export default NuxtAuthHandler({
   },
   callbacks: {
     async jwt({ token, user }) {
+      // This is true when the user is signing in for the first time
       if (user) {
         token = {
           ...token,
           ...user
         }
       }
+      const accessToken = (token as any).accessToken as string | undefined
+
+      if (accessToken) {
+        try {
+          const newData = await getUserData(accessToken)
+          ;(token as any).user = newData.data.user
+          ;(token as any).roles = newData.data.roles
+          ;(token as any).userFetchedAt = Date.now()
+          ;(token as any).sessionError = undefined
+        } catch (err: any) {
+          console.error("err in jwt callback: ", err)
+          ;(token as any).sessionError = err?.status || "user_fetch_failed"
+        }
+      }
+
+      if (accessToken) {
+        ;(token as any).accessToken = accessToken
+      }
+
       return token
     },
     async session({ session, token }) {
       try {
-        const newData = await getUserData(token.accessToken as string)
+        const accessToken = (token as any).accessToken as string | undefined
 
-        if (!newData.data.user) {
+        if (!accessToken) {
           return null
         }
 
         ;(session as any).user = {
           ...session.user,
-          ...token,
-          ...newData.data.user,
-          roles: newData.data.roles
+          roles: (token as any).roles,
+          accessToken
+        }
+
+        if ((token as any).sessionError) {
+          ;(session as any).error = (token as any).sessionError
         }
 
         return Promise.resolve(session as any)
       } catch (err: any) {
-        throw createError({
-          message: err?.data?.message || "Unable to refresh session",
-          statusCode: err?.status || 500
-        })
+        console.error("err in session callback: ", err)
+        return null
       }
     }
   },

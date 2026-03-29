@@ -1,18 +1,17 @@
 export default {
   auth: {
-    signIn: "/portaluser/portaluser/login",
-    signUp: "/portaluser/portaluser/sign-up",
-    verifyEmail: "/portaluser/portaluser/verify-email",
-    resendVerificationEmail: "/portaluser/portaluser/resend-verification-email",
-    requestPasswordReset: "/portaluser/portaluser/request-password-reset",
-    validatePasswordResetCode: "/portaluser/portaluser/valid-password-reset",
-    resetPassword: "/portaluser/portaluser/reset-password",
-    signOut: "/portaluser/portaluser/logout"
+    signIn: "/auth/login",
+    signUp: "/auth/sign-up",
+    verifyEmail: "/auth/verify-email",
+    resendVerificationEmail: "/auth/resend-verification-email",
+    requestPasswordReset: "/auth/request-password-reset",
+    validatePasswordResetCode: "/auth/valid-password-reset",
+    resetPassword: "/auth/reset-password",
+    signOut: "/auth/logout"
   },
   user: {
-    me: "/portaluser/portaluser/me",
-    update: "/portaluser/portaluser/user-update",
-    getAll: "/portaluser/portaluser/",
+    me: "/me",
+    update: "/user-update",
     enum: "/app/enum/user"
   }
 }
