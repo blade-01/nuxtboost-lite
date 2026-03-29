@@ -77,56 +77,39 @@ export default NuxtAuthHandler({
   },
   callbacks: {
     async jwt({ token, user }) {
-      // This is true when the user is signing in for the first time
       if (user) {
         token = {
           ...token,
           ...user
         }
       }
-      const accessToken = (token as any).accessToken as string | undefined
-
-      if (accessToken) {
-        try {
-          const newData = await getUserData(accessToken)
-          ;(token as any).user = newData.data.user
-          ;(token as any).roles = newData.data.roles
-          ;(token as any).userFetchedAt = Date.now()
-          ;(token as any).sessionError = undefined
-        } catch (err: any) {
-          console.error("err in jwt callback: ", err)
-          ;(token as any).sessionError = err?.status || "user_fetch_failed"
-        }
-      }
-
-      if (accessToken) {
-        ;(token as any).accessToken = accessToken
-      }
-
       return token
     },
     async session({ session, token }) {
-      try {
-        const accessToken = (token as any).accessToken as string | undefined
+      if (!token.accessToken) {
+        console.error("No accessToken found in token")
+        return session
+      }
 
-        if (!accessToken) {
-          return null
+      try {
+        const newData = await getUserData(token.accessToken as string)
+
+        if (!newData.data.user) {
+          console.error("No user found in newData")
+          return session
         }
 
         ;(session as any).user = {
           ...session.user,
-          roles: (token as any).roles,
-          accessToken
+          ...token,
+          ...newData.data.user,
+          roles: newData.data.roles
         }
 
-        if ((token as any).sessionError) {
-          ;(session as any).error = (token as any).sessionError
-        }
-
-        return Promise.resolve(session as any)
+        return Promise.resolve(session)
       } catch (err: any) {
-        console.error("err in session callback: ", err)
-        return null
+        console.error("Error in session callback: ", err)
+        return session // Return session even in case of an error to avoid blank responses
       }
     }
   },

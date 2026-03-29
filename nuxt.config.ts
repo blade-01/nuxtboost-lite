@@ -65,6 +65,20 @@ export default defineNuxtConfig({
   build: {
     transpile: ["primevue"]
   },
+  vite: {
+    optimizeDeps: {
+      include: [
+        "yup",
+        "libphonenumber-js",
+        "@vue/devtools-core",
+        "@vue/devtools-kit",
+        "vue-tel-input",
+        "tailvue",
+        "@primeuix/themes",
+        "@primeuix/themes/aura"
+      ]
+    }
+  },
   /**
    * Environment variables
    */
@@ -110,11 +124,10 @@ export default defineNuxtConfig({
    * nuxt-auth configuration
    */
   auth: {
+    baseURL: `${process.env.AUTH_ORIGIN}/api/auth`,
     originEnvKey: false,
-    baseURL: "/api/auth",
     provider: {
-      type: "authjs",
-      trustHost: true
+      type: "authjs"
     }
   }
 })
