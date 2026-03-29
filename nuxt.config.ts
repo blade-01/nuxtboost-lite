@@ -16,7 +16,7 @@ export default defineNuxtConfig({
         },
         {
           property: "og:url",
-          content: "https://nuxt-boost.vercel.app"
+          content: "https://nuxtboost-lite.vercel.app"
         },
         {
           property: "og:title",
@@ -36,7 +36,7 @@ export default defineNuxtConfig({
         },
         {
           property: "twitter:url",
-          content: "https://nuxt-boost.vercel.app"
+          content: "https://nuxtboost-lite.vercel.app"
         },
         {
           property: "twitter:title",
@@ -110,9 +110,8 @@ export default defineNuxtConfig({
    * nuxt-auth configuration
    */
   auth: {
-    baseURL: process.env.AUTH_ORIGIN,
-    provider: {
-      type: "authjs"
-    }
+    originEnvKey: "",
+    baseURL: "/api/auth",
+    provider: { type: "authjs" }
   }
 })
