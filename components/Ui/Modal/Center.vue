@@ -1,53 +1,53 @@
 <script lang="ts" setup>
 const props = defineProps<{
-  modelValue: boolean
-  header?: string
-  outerClass?: string
-  headerClass?: string
-  persistent?: boolean
-}>()
+  modelValue: boolean;
+  header?: string;
+  outerClass?: string;
+  headerClass?: string;
+  persistent?: boolean;
+}>();
 
 const emit = defineEmits<{
-  (event: "update:modelValue", value: boolean): void
-  (event: "hide"): void
-}>()
+  (event: "update:modelValue", value: boolean): void;
+  (event: "hide"): void;
+}>();
 
 const close = () => {
-  emit("update:modelValue", false)
-  emit("hide")
-}
+  emit("update:modelValue", false);
+  emit("hide");
+};
 
 const handleOuterClick = () => {
   if (!props.persistent) {
-    close()
+    close();
   }
-}
+};
 
 const handleKeydown = (event: KeyboardEvent) => {
   if (event.key === "Escape") {
-    handleOuterClick()
+    handleOuterClick();
   }
-}
+};
 
 watch(
   () => props.modelValue,
   (value) => {
     if (!import.meta.client) {
-      return
+      return;
     }
 
-    document.body.classList.toggle("overflow-hidden", value)
-  }
-)
+    document.body.classList.toggle("overflow-hidden", value);
+  },
+);
 
 onMounted(() => {
-  window.addEventListener("keydown", handleKeydown)
-})
+  window.addEventListener("keydown", handleKeydown);
+});
 
 onBeforeUnmount(() => {
-  window.removeEventListener("keydown", handleKeydown)
-  document.body.classList.remove("overflow-hidden")
-})
+  window.removeEventListener("keydown", handleKeydown);
+  document.body.classList.remove("overflow-hidden");
+});
 </script>
 
 <template>
@@ -68,7 +68,10 @@ onBeforeUnmount(() => {
                 class="flex items-center justify-between border-b border-border-primary px-6 py-5"
                 :class="headerClass"
               >
-                <h3 v-if="header" class="text-lg font-semibold text-text-primary">
+                <h3
+                  v-if="header"
+                  class="text-lg font-semibold text-text-primary"
+                >
                   {{ header }}
                 </h3>
                 <button

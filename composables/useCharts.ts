@@ -1,6 +1,6 @@
 export default () => {
-  const axisColor = "#94a3b8"
-  const gridColor = "rgba(148, 163, 184, 0.18)"
+  const axisColor = "#94a3b8";
+  const gridColor = "rgba(148, 163, 184, 0.18)";
 
   const revenueTrendData = {
     labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -15,10 +15,10 @@ export default () => {
         pointBackgroundColor: "#ffffff",
         pointBorderColor: "#0f172a",
         pointBorderWidth: 2,
-        pointRadius: 4
-      }
-    ]
-  }
+        pointRadius: 4,
+      },
+    ],
+  };
 
   const volumeMixData = {
     labels: ["POS", "Transfers", "Bills", "Airtime"],
@@ -28,10 +28,10 @@ export default () => {
         backgroundColor: ["#0f172a", "#334155", "#64748b", "#cbd5e1"],
         borderColor: "#ffffff",
         borderWidth: 5,
-        hoverOffset: 8
-      }
-    ]
-  }
+        hoverOffset: 8,
+      },
+    ],
+  };
 
   const merchantGrowthData = {
     labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"],
@@ -41,24 +41,24 @@ export default () => {
         data: [18, 26, 21, 32, 38],
         backgroundColor: "#0f172a",
         borderRadius: 12,
-        borderSkipped: false
+        borderSkipped: false,
       },
       {
         label: "KYC approved",
         data: [12, 18, 19, 24, 29],
         backgroundColor: "#cbd5e1",
         borderRadius: 12,
-        borderSkipped: false
-      }
-    ]
-  }
+        borderSkipped: false,
+      },
+    ],
+  };
 
   const baseOptions = {
     responsive: true,
     maintainAspectRatio: false,
     animation: {
       duration: 650,
-      easing: "easeOutQuart" as const
+      easing: "easeOutQuart" as const,
     },
     plugins: {
       legend: {
@@ -66,18 +66,18 @@ export default () => {
           color: "#334155",
           usePointStyle: true,
           boxWidth: 10,
-          padding: 18
-        }
+          padding: 18,
+        },
       },
       tooltip: {
         backgroundColor: "#0f172a",
         titleColor: "#ffffff",
         bodyColor: "#e2e8f0",
         padding: 12,
-        displayColors: true
-      }
-    }
-  }
+        displayColors: true,
+      },
+    },
+  };
 
   return {
     revenueTrendData,
@@ -89,18 +89,18 @@ export default () => {
         scales: {
           x: {
             grid: { display: false },
-            ticks: { color: axisColor }
+            ticks: { color: axisColor },
           },
           y: {
             beginAtZero: true,
             grid: { color: gridColor },
-            ticks: { color: axisColor }
-          }
-        }
+            ticks: { color: axisColor },
+          },
+        },
       },
       doughnut: {
         ...baseOptions,
-        cutout: "68%"
+        cutout: "68%",
       },
       bar: {
         ...baseOptions,
@@ -108,15 +108,15 @@ export default () => {
           x: {
             stacked: false,
             grid: { display: false },
-            ticks: { color: axisColor }
+            ticks: { color: axisColor },
           },
           y: {
             beginAtZero: true,
             grid: { color: gridColor },
-            ticks: { color: axisColor }
-          }
-        }
-      }
-    }
-  }
-}
+            ticks: { color: axisColor },
+          },
+        },
+      },
+    },
+  };
+};

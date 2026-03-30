@@ -1,23 +1,23 @@
 <script lang="ts">
 export default {
-  inheritAttrs: false
-}
+  inheritAttrs: false,
+};
 </script>
 
 <script lang="ts" setup>
 defineProps<{
-  name: string
-  label?: string
-  error?: string
-  outerClasses?: string
-  required?: boolean
-}>()
+  name: string;
+  label?: string;
+  error?: string;
+  outerClasses?: string;
+  required?: boolean;
+}>();
 
-const isVisible = ref(false)
+const isVisible = ref(false);
 
 const inputType = computed(() => {
-  return isVisible.value ? "text" : "password"
-})
+  return isVisible.value ? "text" : "password";
+});
 </script>
 
 <template>
@@ -25,7 +25,7 @@ const inputType = computed(() => {
     class="input-group"
     :class="{
       error: error,
-      [outerClasses || '']: outerClasses
+      [outerClasses || '']: outerClasses,
     }"
   >
     <label v-if="label" :for="name">
@@ -33,7 +33,12 @@ const inputType = computed(() => {
       <span v-if="required" class="required-mark">*</span>
     </label>
     <div class="relative">
-      <Field :name="name" :type="inputType" v-bind="$attrs" class="input-style" />
+      <Field
+        :name="name"
+        :type="inputType"
+        v-bind="$attrs"
+        class="input-style"
+      />
       <span
         class="mdi absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer"
         @click="isVisible = !isVisible"

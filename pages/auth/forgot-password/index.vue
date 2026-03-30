@@ -1,36 +1,38 @@
 <script setup lang="ts">
 definePageMeta({
   layout: "auth",
-  middleware: "guest"
-})
+  middleware: "guest",
+});
 useHead({
-  title: "Forgot Password"
-})
+  title: "Forgot Password",
+});
 
-const { forgotPasswordSchema } = useValidations()
-const router = useRouter()
+const { forgotPasswordSchema } = useValidations();
+const router = useRouter();
 
 const submitReset = async (values: { email: string }) => {
-  const { toast } = useAppFeedback()
-  await toast.success("Password reset instructions queued.")
+  const { toast } = useAppFeedback();
+  await toast.success("Password reset instructions queued.");
   await router.push({
     path: "/auth/otp",
     query: {
-      email: values.email
-    }
-  })
-}
+      email: values.email,
+    },
+  });
+};
 </script>
 
 <template>
   <div>
-    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-text-icon">Account recovery</p>
+    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-text-icon">
+      Account recovery
+    </p>
     <h1 class="mt-3 text-4xl font-semibold tracking-tight text-text-primary">
       Send a password reset link.
     </h1>
     <p class="mt-3 text-sm leading-6 text-text-secondary">
-      A ready-made recovery page is part of most starters, even when the backend flow is still being
-      wired.
+      A ready-made recovery page is part of most starters, even when the backend
+      flow is still being wired.
     </p>
 
     <Form

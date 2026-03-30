@@ -1,57 +1,57 @@
 <script setup lang="ts">
 interface Props {
-  modelValue: boolean
-  position?: string
-  size?: string
-  persistent?: boolean
-  title?: string
+  modelValue: boolean;
+  position?: string;
+  size?: string;
+  persistent?: boolean;
+  title?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: true,
   position: "right",
   size: "md",
-  persistent: false
-})
+  persistent: false,
+});
 
-const emits = defineEmits(["update:modelValue", "close"])
+const emits = defineEmits(["update:modelValue", "close"]);
 
 function handleClose() {
-  emits("update:modelValue", false)
-  emits("close", true)
+  emits("update:modelValue", false);
+  emits("close", true);
 }
 
 function handleOuterClick() {
   if (!props.persistent) {
-    handleClose()
+    handleClose();
   }
 }
 
 const handleKeydown = (e: KeyboardEvent) => {
   if (e.key === "Escape") {
-    handleOuterClick()
+    handleOuterClick();
   }
-}
+};
 
 onMounted(() => {
-  window.addEventListener("keydown", handleKeydown)
-})
+  window.addEventListener("keydown", handleKeydown);
+});
 
 onBeforeUnmount(() => {
-  window.removeEventListener("keydown", handleKeydown)
-  document?.body?.classList?.remove("overflow-hidden")
-})
+  window.removeEventListener("keydown", handleKeydown);
+  document?.body?.classList?.remove("overflow-hidden");
+});
 
 watch(
   () => props.modelValue,
   (value) => {
     if (value) {
-      document?.body?.classList?.add("overflow-hidden")
+      document?.body?.classList?.add("overflow-hidden");
     } else {
-      document?.body?.classList?.remove("overflow-hidden")
+      document?.body?.classList?.remove("overflow-hidden");
     }
-  }
-)
+  },
+);
 </script>
 <template>
   <Teleport to="body">
@@ -62,7 +62,7 @@ watch(
         :class="{
           'flex justify-end': position === 'right',
           'flex justify-start': position === 'left',
-          'flex items-end': position === 'bottom'
+          'flex items-end': position === 'bottom',
         }"
         @click.self="handleOuterClick"
       >
@@ -73,7 +73,7 @@ watch(
             'w-full md:w-1/2': size === 'md',
             'w-full lg:w-3/4': size === 'lg',
             'w-full': size === 'full',
-            '!h-1/2 !w-full': position === 'top' || position === 'bottom'
+            '!h-1/2 !w-full': position === 'top' || position === 'bottom',
           }"
         >
           <div class="inner relative w-full">
@@ -81,7 +81,9 @@ watch(
               <div
                 class="flex w-full items-center border-b p-5"
                 :class="
-                  position === 'left' ? 'justify-between' : 'flex-row-reverse justify-end gap-3'
+                  position === 'left'
+                    ? 'justify-between'
+                    : 'flex-row-reverse justify-end gap-3'
                 "
               >
                 <slot name="title">

@@ -1,29 +1,29 @@
 <script lang="ts">
 export default {
-  inheritAttrs: false
-}
+  inheritAttrs: false,
+};
 </script>
 
 <script lang="ts" setup>
 defineProps<{
-  name: string
-  options: any[]
-  label?: string
-  error?: string
-  outerClasses?: string
-  required?: boolean
-  optionLabel?: string
-  optionValue?: string
-  filter?: boolean
-  disabled?: boolean
-  showClear?: boolean
-  maxSelectedLabels?: number
-  selectionLimit?: number
-  prependIcon?: string
-  appendIcon?: string
-}>()
+  name: string;
+  options: any[];
+  label?: string;
+  error?: string;
+  outerClasses?: string;
+  required?: boolean;
+  optionLabel?: string;
+  optionValue?: string;
+  filter?: boolean;
+  disabled?: boolean;
+  showClear?: boolean;
+  maxSelectedLabels?: number;
+  selectionLimit?: number;
+  prependIcon?: string;
+  appendIcon?: string;
+}>();
 
-const { multiSelectStyle } = usePvStyle()
+const { multiSelectStyle } = usePvStyle();
 </script>
 
 <template>
@@ -33,7 +33,7 @@ const { multiSelectStyle } = usePvStyle()
     class="input-group w-full"
     :class="{
       error: error,
-      [outerClasses || '']: outerClasses
+      [outerClasses || '']: outerClasses,
     }"
     v-slot="{ handleChange, value }"
   >
@@ -57,7 +57,7 @@ const { multiSelectStyle } = usePvStyle()
         :class="{
           'p-invalid !border !border-red-500': error,
           'app-field-control--with-prepend': prependIcon,
-          'app-field-control--with-append': appendIcon
+          'app-field-control--with-append': appendIcon,
         }"
         :pt="multiSelectStyle"
         :options="options"

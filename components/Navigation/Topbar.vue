@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import UiBtn from "~/components/Ui/Btn/index.vue"
-defineEmits(["toggleSidebar"])
-const { tooltipStyle } = usePvStyle()
+import UiBtn from "~/components/Ui/Btn/index.vue";
+defineEmits(["toggleSidebar"]);
+const { tooltipStyle } = usePvStyle();
 const { toggleSidebar, nav } = inject("collapsible") as {
-  nav: Ref<boolean>
-  toggleSidebar: () => void
-}
-const { primaryRole } = useAccessControl()
-const sidebarToggler = ref<InstanceType<typeof UiBtn> | null>(null)
+  nav: Ref<boolean>;
+  toggleSidebar: () => void;
+};
+const { primaryRole } = useAccessControl();
+const sidebarToggler = ref<InstanceType<typeof UiBtn> | null>(null);
 useShortcut({
   toggle() {
-    sidebarToggler.value?.triggerClick()
-  }
-})
+    sidebarToggler.value?.triggerClick();
+  },
+});
 defineProps<{
-  title: string | undefined
-}>()
+  title: string | undefined;
+}>();
 </script>
 
 <template>
   <div
     class="main fixed top-0 z-50 flex h-[var(--sidebar-height)] w-full items-center border-b border-b-border-primary bg-bg-primary shadow-sm transition-all duration-500 ease-out md:w-[calc(100%-var(--sidebar-width-md))] lg:w-[calc(100%-var(--sidebar-width-lg))] 2xl:w-[calc(100%-var(--sidebar-width-2xl))]"
     :class="{
-      'md:!w-full': nav
+      'md:!w-full': nav,
     }"
   >
     <div class="w-full p-4">
@@ -30,7 +30,7 @@ defineProps<{
         <UiBtn
           v-tooltip="{
             value: `${nav ? 'collapse [' : 'expand ['}`,
-            pt: tooltipStyle
+            pt: tooltipStyle,
           }"
           ref="sidebarToggler"
           class="!flex !h-9 !w-9 !items-center !justify-center rounded-full border border-border-primary !bg-white !p-2 !text-text-primary shadow-sm shadow-slate-200/60"
@@ -48,7 +48,7 @@ defineProps<{
           <UiBtn
             v-tooltip="{
               value: `${!nav ? 'collapse [' : 'expand ['}`,
-              pt: tooltipStyle
+              pt: tooltipStyle,
             }"
             ref="sidebarToggler"
             class="!h-10 !w-10 !rounded-full !border !border-border-primary !bg-white !p-0 !text-text-primary shadow-sm shadow-slate-200/60"
@@ -74,7 +74,9 @@ defineProps<{
               NB
             </div>
             <div class="hidden md:flex md:flex-col">
-              <p class="text-sm font-semibold text-text-primary">Workspace Admin</p>
+              <p class="text-sm font-semibold text-text-primary">
+                Workspace Admin
+              </p>
               <p class="text-xs text-text-secondary">
                 {{ capitalizeFirstLetter(primaryRole) }}
               </p>

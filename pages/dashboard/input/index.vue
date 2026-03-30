@@ -1,81 +1,83 @@
 <script setup lang="ts">
-import useValidations from "~/composables/useValidations"
-const { toast } = useAppFeedback()
+import useValidations from "~/composables/useValidations";
+const { toast } = useAppFeedback();
 definePageMeta({
   layout: "dashboard",
   middleware: "role-access",
-  roles: ["admin", "member", "staff"]
-})
+  roles: ["admin", "member", "staff"],
+});
 useHead({
-  title: "Forms"
-})
+  title: "Forms",
+});
 
-const { mainSchema } = useValidations()
+const { mainSchema } = useValidations();
 const genders = [
   {
     label: "Male",
-    value: "male"
+    value: "male",
   },
   {
     label: "Female",
-    value: "female"
-  }
-]
+    value: "female",
+  },
+];
 
 const countries = [
   {
     label: "Nigeria",
-    value: "nigeria"
+    value: "nigeria",
   },
   {
     label: "Malaysia",
-    value: "malaysia"
+    value: "malaysia",
   },
   {
     label: "Finland",
-    value: "finland"
-  }
-]
+    value: "finland",
+  },
+];
 
 const cities = [
   {
     label: "Lagos",
-    value: "lagos"
+    value: "lagos",
   },
   {
     label: "Abuja",
-    value: "abuja"
+    value: "abuja",
   },
   {
     label: "Port Harcourt",
-    value: "port-harcourt"
+    value: "port-harcourt",
   },
   {
     label: "Ibadan",
-    value: "ibadan"
-  }
-]
+    value: "ibadan",
+  },
+];
 
-const items = ref<string[]>([])
+const items = ref<string[]>([]);
 function search(event: { query: string }) {
-  items.value = [...Array(10).keys()].map((item) => event.query + "-" + item)
+  items.value = [...Array(10).keys()].map((item) => event.query + "-" + item);
 }
 function searchChips(event: { query: string }) {
-  chipSuggestions.value = [...Array(6).keys()].map((item) => `${event.query}-${item + 1}`)
+  chipSuggestions.value = [...Array(6).keys()].map(
+    (item) => `${event.query}-${item + 1}`,
+  );
 }
-const chipSuggestions = ref<string[]>([])
+const chipSuggestions = ref<string[]>([]);
 
 function handleFormSubmit() {
-  toast.success("Form submitted successfully")
+  toast.success("Form submitted successfully");
 }
 
 function onInvalidSubmit() {
-  const el = document.querySelector(".error")
+  const el = document.querySelector(".error");
   if (el) {
-    el.classList.add("scroll-mt-16")
+    el.classList.add("scroll-mt-16");
     el.scrollIntoView({
-      behavior: "smooth"
-    })
+      behavior: "smooth",
+    });
   }
 }
 </script>
@@ -88,29 +90,43 @@ function onInvalidSubmit() {
       >
         <div class="grid gap-6 xl:grid-cols-[1.35fr_0.8fr]">
           <div class="max-w-2xl">
-            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-text-icon">
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.28em] text-text-icon"
+            >
               Input Studio
             </p>
-            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-text-primary">
-              A richer form lab with grouped controls, cleaner scanning, and a stronger dashboard
-              identity.
+            <h2
+              class="mt-3 text-3xl font-semibold tracking-tight text-text-primary"
+            >
+              A richer form lab with grouped controls, cleaner scanning, and a
+              stronger dashboard identity.
             </h2>
             <p class="mt-3 text-sm leading-6 text-text-secondary">
-              The sections below are arranged like a product form workspace rather than a plain
-              component dump, so text fields, uploads, dropdowns, and date controls feel
-              intentional.
+              The sections below are arranged like a product form workspace
+              rather than a plain component dump, so text fields, uploads,
+              dropdowns, and date controls feel intentional.
             </p>
           </div>
           <div class="grid gap-3 text-sm text-text-secondary">
-            <div class="rounded-2xl border border-border-primary bg-white/80 px-4 py-3">
-              <p class="text-xs uppercase tracking-[0.22em] text-text-icon">Controls</p>
+            <div
+              class="rounded-2xl border border-border-primary bg-white/80 px-4 py-3"
+            >
+              <p class="text-xs uppercase tracking-[0.22em] text-text-icon">
+                Controls
+              </p>
               <p class="mt-2 font-medium text-text-primary">
                 Text, uploads, chips, dropdowns, dates
               </p>
             </div>
-            <div class="rounded-2xl border border-border-primary bg-white/80 px-4 py-3">
-              <p class="text-xs uppercase tracking-[0.22em] text-text-icon">Validation</p>
-              <p class="mt-2 font-medium text-text-primary">Schema-driven submit and error focus</p>
+            <div
+              class="rounded-2xl border border-border-primary bg-white/80 px-4 py-3"
+            >
+              <p class="text-xs uppercase tracking-[0.22em] text-text-icon">
+                Validation
+              </p>
+              <p class="mt-2 font-medium text-text-primary">
+                Schema-driven submit and error focus
+              </p>
             </div>
           </div>
         </div>
@@ -128,10 +144,14 @@ function onInvalidSubmit() {
             class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
           >
             <div class="mb-4">
-              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+              >
                 Section One
               </p>
-              <p class="mt-2 text-2xl font-semibold text-text-primary">Basic Inputs</p>
+              <p class="mt-2 text-2xl font-semibold text-text-primary">
+                Basic Inputs
+              </p>
             </div>
             <div class="grid grid-cols-1 gap-3.5 md:grid-cols-3 lg:grid-cols-3">
               <UiInputField
@@ -204,10 +224,14 @@ function onInvalidSubmit() {
             class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
           >
             <div class="mb-4">
-              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+              >
                 Section Two
               </p>
-              <p class="mt-2 text-2xl font-semibold text-text-primary">Not So Basic Inputs</p>
+              <p class="mt-2 text-2xl font-semibold text-text-primary">
+                Not So Basic Inputs
+              </p>
             </div>
             <div class="grid grid-cols-1 gap-3.5 md:grid-cols-3 lg:grid-cols-3">
               <UiInputPhone
@@ -280,10 +304,14 @@ function onInvalidSubmit() {
             class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
           >
             <div class="mb-4">
-              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+              >
                 Section Three
               </p>
-              <p class="mt-2 text-2xl font-semibold text-text-primary">Dropdowns</p>
+              <p class="mt-2 text-2xl font-semibold text-text-primary">
+                Dropdowns
+              </p>
             </div>
             <div class="grid grid-cols-1 gap-3.5 md:grid-cols-3 lg:grid-cols-3">
               <UiInputDropdown
@@ -329,7 +357,9 @@ function onInvalidSubmit() {
             class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
           >
             <div class="mb-4">
-              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+              >
                 Section Four
               </p>
               <p class="mt-2 text-2xl font-semibold text-text-primary">
@@ -349,10 +379,14 @@ function onInvalidSubmit() {
             class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
           >
             <div class="mb-4">
-              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+              >
                 Section Five
               </p>
-              <p class="mt-2 text-2xl font-semibold text-text-primary">Date Pickers</p>
+              <p class="mt-2 text-2xl font-semibold text-text-primary">
+                Date Pickers
+              </p>
             </div>
             <div class="grid grid-cols-1 gap-3.5 md:grid-cols-3 lg:grid-cols-3">
               <UiInputDatePicker

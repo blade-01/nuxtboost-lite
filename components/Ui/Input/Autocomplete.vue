@@ -1,44 +1,44 @@
 <script lang="ts">
 export default {
-  inheritAttrs: false
-}
+  inheritAttrs: false,
+};
 </script>
 
 <script lang="ts" setup>
 withDefaults(
   defineProps<{
-    name: string
-    suggestions: any[]
-    label?: string
-    error?: string
-    outerClasses?: string
-    required?: boolean
-    optionLabel?: string
-    optionValue?: string
-    placeholder?: string
-    disabled?: boolean
-    dropdown?: boolean
-    forceSelection?: boolean
-    prependIcon?: string
-    appendIcon?: string
+    name: string;
+    suggestions: any[];
+    label?: string;
+    error?: string;
+    outerClasses?: string;
+    required?: boolean;
+    optionLabel?: string;
+    optionValue?: string;
+    placeholder?: string;
+    disabled?: boolean;
+    dropdown?: boolean;
+    forceSelection?: boolean;
+    prependIcon?: string;
+    appendIcon?: string;
   }>(),
   {
     suggestions: () => [],
     placeholder: "Start typing...",
     dropdown: false,
-    forceSelection: false
-  }
-)
+    forceSelection: false,
+  },
+);
 
 const emit = defineEmits<{
-  (event: "complete", value: any): void
-}>()
+  (event: "complete", value: any): void;
+}>();
 
-const { autocompleteStyle } = usePvStyle()
+const { autocompleteStyle } = usePvStyle();
 
 const handleComplete = (event: any) => {
-  emit("complete", event)
-}
+  emit("complete", event);
+};
 </script>
 
 <template>
@@ -48,7 +48,7 @@ const handleComplete = (event: any) => {
     class="input-group w-full"
     :class="{
       error: error,
-      [outerClasses || '']: outerClasses
+      [outerClasses || '']: outerClasses,
     }"
     v-slot="{ handleChange, value }"
   >
@@ -71,7 +71,7 @@ const handleComplete = (event: any) => {
         class="app-field-control app-field-control--autocomplete w-full"
         :class="{
           'app-field-control--with-prepend': prependIcon,
-          'app-field-control--with-append': appendIcon
+          'app-field-control--with-append': appendIcon,
         }"
         :suggestions="suggestions"
         :option-label="optionLabel"

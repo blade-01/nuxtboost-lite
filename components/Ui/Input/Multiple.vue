@@ -1,112 +1,116 @@
 <script lang="ts">
 export default {
-  inheritAttrs: false
-}
+  inheritAttrs: false,
+};
 </script>
 
 <script lang="ts" setup>
 const props = withDefaults(
   defineProps<{
-    name: string
-    suggestions: string[]
-    label?: string
-    error?: string
-    outerClasses?: string
-    required?: boolean
-    placeholder?: string
-    disabled?: boolean
-    withSuggestions?: boolean
+    name: string;
+    suggestions: string[];
+    label?: string;
+    error?: string;
+    outerClasses?: string;
+    required?: boolean;
+    placeholder?: string;
+    disabled?: boolean;
+    withSuggestions?: boolean;
   }>(),
   {
     suggestions: () => [],
     placeholder: "Add values...",
-    withSuggestions: true
-  }
-)
+    withSuggestions: true,
+  },
+);
 
-const attrs = useAttrs()
-const autoCompleteRef = ref<any>(null)
-const draftValue = ref("")
+const attrs = useAttrs();
+const autoCompleteRef = ref<any>(null);
+const draftValue = ref("");
 
 const emit = defineEmits<{
-  (event: "complete", value: any): void
-}>()
+  (event: "complete", value: any): void;
+}>();
 
-const { multipleInputStyle } = usePvStyle()
-const { value, errorMessage, setValue } = useField<string[]>(toRef(props, "name"), undefined, {
-  syncVModel: false,
-  initialValue: []
-})
+const { multipleInputStyle } = usePvStyle();
+const { value, errorMessage, setValue } = useField<string[]>(
+  toRef(props, "name"),
+  undefined,
+  {
+    syncVModel: false,
+    initialValue: [],
+  },
+);
 
-const resolvedError = computed(() => props.error || errorMessage.value)
+const resolvedError = computed(() => props.error || errorMessage.value);
 const items = computed(() =>
-  Array.isArray(value.value) ? value.value.map((item) => String(item)) : []
-)
+  Array.isArray(value.value) ? value.value.map((item) => String(item)) : [],
+);
 
 const inputPt = computed(() => ({
   ...multipleInputStyle.value,
   root: {
-    class: "min-w-[180px] flex-1 border-0 bg-transparent shadow-none"
+    class: "min-w-[180px] flex-1 border-0 bg-transparent shadow-none",
   },
   input: {
     class:
-      "min-h-[32px] w-full border-0 bg-transparent px-0 py-0 text-sm text-text-primary outline-none ring-0 placeholder:text-placeholder-primary"
-  }
-}))
+      "min-h-[32px] w-full border-0 bg-transparent px-0 py-0 text-sm text-text-primary outline-none ring-0 placeholder:text-placeholder-primary",
+  },
+}));
 
 const clearInputElement = () => {
   nextTick(() => {
-    const input = autoCompleteRef.value?.$el?.querySelector("input")
+    const input = autoCompleteRef.value?.$el?.querySelector("input");
 
     if (input instanceof HTMLInputElement) {
-      input.value = ""
+      input.value = "";
     }
-  })
-}
+  });
+};
 
 const commitItems = (nextItems: string[]) => {
-  setValue(nextItems)
-  draftValue.value = ""
-  clearInputElement()
-}
+  setValue(nextItems);
+  draftValue.value = "";
+  clearInputElement();
+};
 
 const appendChip = () => {
-  const nextValue = draftValue.value.trim()
+  const nextValue = draftValue.value.trim();
 
   if (!nextValue) {
-    return
+    return;
   }
 
   if (items.value.includes(nextValue)) {
-    commitItems(items.value)
-    return
+    commitItems(items.value);
+    return;
   }
 
-  commitItems([...items.value, nextValue])
-}
+  commitItems([...items.value, nextValue]);
+};
 
 const removeChip = (itemToRemove: string) => {
-  commitItems(items.value.filter((item) => item !== itemToRemove))
-}
+  commitItems(items.value.filter((item) => item !== itemToRemove));
+};
 
 const handleOptionSelect = (event: { value?: unknown }) => {
-  const nextValue = String(event?.value ?? "").trim()
+  const nextValue = String(event?.value ?? "").trim();
 
   if (!nextValue || items.value.includes(nextValue)) {
-    commitItems(items.value)
-    return
+    commitItems(items.value);
+    return;
   }
 
-  commitItems([...items.value, nextValue])
-}
+  commitItems([...items.value, nextValue]);
+};
 
 const handleComplete = (event: any) => {
-  emit("complete", event)
-}
+  emit("complete", event);
+};
 
 const updateDraftValue = (nextValue: unknown) => {
-  draftValue.value = typeof nextValue === "string" ? nextValue : ""
-}
+  draftValue.value = typeof nextValue === "string" ? nextValue : "";
+};
 </script>
 
 <template>
@@ -114,14 +118,16 @@ const updateDraftValue = (nextValue: unknown) => {
     class="input-group w-full"
     :class="{
       error: resolvedError,
-      [outerClasses || '']: outerClasses
+      [outerClasses || '']: outerClasses,
     }"
   >
     <label v-if="label" :for="name">
       {{ label }}
       <span v-if="required" class="required-mark">*</span>
     </label>
-    <div class="app-field-control flex min-h-[44px] flex-wrap items-center gap-2 px-3 py-2">
+    <div
+      class="app-field-control flex min-h-[44px] flex-wrap items-center gap-2 px-3 py-2"
+    >
       <span
         v-for="item in items"
         :key="item"
@@ -153,6 +159,8 @@ const updateDraftValue = (nextValue: unknown) => {
         @keydown.tab.prevent="appendChip"
       />
     </div>
-    <small v-if="resolvedError" class="error-message">{{ resolvedError }}</small>
+    <small v-if="resolvedError" class="error-message">{{
+      resolvedError
+    }}</small>
   </div>
 </template>

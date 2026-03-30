@@ -1,17 +1,17 @@
 <script lang="ts">
 export default {
-  inheritAttrs: false
-}
+  inheritAttrs: false,
+};
 </script>
 
 <script setup lang="ts">
 defineProps<{
-  name: string
-  label?: string
-  error?: string
-  requiredMark?: boolean
-  outerClasses?: string
-}>()
+  name: string;
+  label?: string;
+  error?: string;
+  requiredMark?: boolean;
+  outerClasses?: string;
+}>();
 </script>
 
 <template>
@@ -21,7 +21,7 @@ defineProps<{
     class="w-full"
     :class="{
       error: error,
-      [outerClasses || '']: outerClasses
+      [outerClasses || '']: outerClasses,
     }"
     v-slot="{ handleChange, value }"
   >
@@ -50,6 +50,8 @@ defineProps<{
         <span v-if="requiredMark" class="required-mark">*</span>
       </span>
     </button>
-    <span v-if="error" class="error-message text-xs text-red-500">{{ error }}</span>
+    <span v-if="error" class="error-message text-xs text-red-500">{{
+      error
+    }}</span>
   </Field>
 </template>

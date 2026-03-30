@@ -1,7 +1,9 @@
 <template>
   <footer class="mx-auto w-full max-w-5xl border-t border-border-primary pt-8">
     <div class="flex items-center justify-center gap-3.5">
-      <NuxtLink to="/"><Icon name="mdi:home" size="23" class="link" /></NuxtLink>
+      <NuxtLink to="/"
+        ><Icon name="mdi:home" size="23" class="link"
+      /></NuxtLink>
       <NuxtLink to="/about"
         ><Icon name="mdi:book-open-page-variant-outline" size="23" class="link"
       /></NuxtLink>
@@ -14,8 +16,8 @@
     </div>
     <aside class="mt-5 text-center">
       <p class="text-sm font-light text-text-secondary">
-        Built as a reusable Nuxt SaaS and admin starter for teams that want structure, not
-        boilerplate.
+        Built as a reusable Nuxt SaaS and admin starter for teams that want
+        structure, not boilerplate.
       </p>
     </aside>
   </footer>

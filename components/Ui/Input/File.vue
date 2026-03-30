@@ -1,26 +1,26 @@
 <script lang="ts">
 export default {
-  inheritAttrs: false
-}
+  inheritAttrs: false,
+};
 </script>
 
 <script lang="ts" setup>
 withDefaults(
   defineProps<{
-    name: string
-    prependIcon?: string
-    appendIcon?: string
-    label?: string
-    error?: string
-    outerClasses?: string
-    required?: boolean
-    multiple?: boolean
-    placeholder?: string
+    name: string;
+    prependIcon?: string;
+    appendIcon?: string;
+    label?: string;
+    error?: string;
+    outerClasses?: string;
+    required?: boolean;
+    multiple?: boolean;
+    placeholder?: string;
   }>(),
   {
-    placeholder: "Upload file..."
-  }
-)
+    placeholder: "Upload file...",
+  },
+);
 </script>
 
 <template>
@@ -30,7 +30,7 @@ withDefaults(
     class="input-group"
     :class="{
       error: error,
-      [outerClasses || '']: outerClasses
+      [outerClasses || '']: outerClasses,
     }"
     v-slot="{ value, handleChange }"
   >
@@ -61,7 +61,7 @@ withDefaults(
         <span
           class="input-style flex gap-2.5 font-light !text-text-primary"
           :class="{
-            '!pl-10': prependIcon
+            '!pl-10': prependIcon,
           }"
         >
           <span v-if="value">{{
@@ -93,7 +93,7 @@ withDefaults(
       <div
         class="relative h-16 w-16 rounded-md"
         :class="{
-          'h-fit !w-fit': !isImage(value)
+          'h-fit !w-fit': !isImage(value),
         }"
         v-if="!multiple"
       >
@@ -118,7 +118,7 @@ withDefaults(
           <div
             class="relative h-16 w-16 rounded-md"
             :class="{
-              'h-fit !w-fit': !isImage(file)
+              'h-fit !w-fit': !isImage(file),
             }"
           >
             <img
@@ -134,7 +134,9 @@ withDefaults(
               name="mdi:close-circle-outline"
               size="24"
               class="text-secondary absolute -right-2.5 -top-2.5 cursor-pointer"
-              @click="handleChange(value.filter((f: any) => f.name !== file.name))"
+              @click="
+                handleChange(value.filter((f: any) => f.name !== file.name))
+              "
             />
           </div>
         </div>

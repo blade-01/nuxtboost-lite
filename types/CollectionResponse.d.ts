@@ -1,8 +1,8 @@
 interface CollectionResponse<T> {
-  result: boolean
-  message: string
+  result: boolean;
+  message: string;
   data: {
-    models: T[]
-    pagination: Pagination
-  }
+    models: T[];
+    pagination: Pagination;
+  };
 }

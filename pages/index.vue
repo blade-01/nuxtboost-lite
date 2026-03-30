@@ -1,7 +1,7 @@
 <script setup lang="ts">
 useHead({
-  title: "Nuxt Boost"
-})
+  title: "Nuxt Boost",
+});
 </script>
 
 <template>
@@ -20,13 +20,20 @@ useHead({
       >
         A clean Nuxt foundation for admin dashboards and SaaS products.
       </h1>
-      <p class="mt-5 max-w-2xl text-base leading-7 text-text-secondary md:text-lg">
-        Start with layout, auth flows, forms, tables, charts, and baseline workspace modules already
-        structured so teams can move into product work faster.
+      <p
+        class="mt-5 max-w-2xl text-base leading-7 text-text-secondary md:text-lg"
+      >
+        Start with layout, auth flows, forms, tables, charts, and baseline
+        workspace modules already structured so teams can move into product work
+        faster.
       </p>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <NuxtLink to="/dashboard" class="btn btn-sm btn-primary">Open Dashboard</NuxtLink>
-        <NuxtLink to="/auth/signin" class="btn btn-sm btn-default">Open Auth</NuxtLink>
+        <NuxtLink to="/dashboard" class="btn btn-sm btn-primary"
+          >Open Dashboard</NuxtLink
+        >
+        <NuxtLink to="/auth/signin" class="btn btn-sm btn-default"
+          >Open Auth</NuxtLink
+        >
       </div>
       <div class="mt-10 grid gap-3 text-left md:grid-cols-3">
         <div

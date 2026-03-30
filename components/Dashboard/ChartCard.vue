@@ -1,8 +1,8 @@
 <script setup lang="ts">
 defineProps<{
-  title: string
-  subtitle: string
-}>()
+  title: string;
+  subtitle: string;
+}>();
 </script>
 
 <template>
@@ -11,7 +11,9 @@ defineProps<{
   >
     <div class="mb-5 flex items-start justify-between gap-4">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.26em] text-text-icon">
+        <p
+          class="text-xs font-semibold uppercase tracking-[0.26em] text-text-icon"
+        >
           {{ title }}
         </p>
         <p class="mt-2 text-sm leading-6 text-text-secondary">

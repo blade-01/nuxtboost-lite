@@ -1,59 +1,61 @@
 <script lang="ts" setup>
 interface Props {
   headers?: {
-    key: string
-    label: string
-    sortable?: boolean
-  }[]
-  items: Array<any>
-  selectable?: boolean
-  selectedItems?: Array<any>
-  selectField?: string
-  rowClasses?: string
-  stickyFirstColumn?: boolean
-  outerClass?: string
-  tableHeader?: string
+    key: string;
+    label: string;
+    sortable?: boolean;
+  }[];
+  items: Array<any>;
+  selectable?: boolean;
+  selectedItems?: Array<any>;
+  selectField?: string;
+  rowClasses?: string;
+  stickyFirstColumn?: boolean;
+  outerClass?: string;
+  tableHeader?: string;
 }
 const props = withDefaults(defineProps<Props>(), {
   headers: () => [],
-  items: () => []
-})
+  items: () => [],
+});
 
-const emits = defineEmits(["select", "update:selectedItems", "rowClick"])
+const emits = defineEmits(["select", "update:selectedItems", "rowClick"]);
 
 // Computed
-const filteredItems = computed(() => props.items)
+const filteredItems = computed(() => props.items);
 
 const selectedItems = computed<any>({
   get() {
-    return props.selectedItems
+    return props.selectedItems;
   },
   set(value) {
-    emits("update:selectedItems", value)
-  }
-})
+    emits("update:selectedItems", value);
+  },
+});
 
 // Methods
 const selectAll = () => {
   if (selectedItems.value.length === filteredItems.value.length) {
-    selectedItems.value = []
+    selectedItems.value = [];
   } else {
-    selectedItems.value = filteredItems.value.map((item) => item[props.selectField || "_id"])
+    selectedItems.value = filteredItems.value.map(
+      (item) => item[props.selectField || "_id"],
+    );
   }
-}
+};
 
-const isScrolled = ref(false)
+const isScrolled = ref(false);
 
 function handleScroll(event: Event) {
-  if (!props.stickyFirstColumn) return
+  if (!props.stickyFirstColumn) return;
 
-  const target = event.target as HTMLDivElement
-  const scrollLeft = target.scrollLeft
+  const target = event.target as HTMLDivElement;
+  const scrollLeft = target.scrollLeft;
 
   if (scrollLeft > 0) {
-    isScrolled.value = true
+    isScrolled.value = true;
   } else {
-    isScrolled.value = false
+    isScrolled.value = false;
   }
 }
 </script>
@@ -63,9 +65,9 @@ function handleScroll(event: Event) {
     class="overflow-x-auto rounded-lg border"
     :class="[
       {
-        'table-fixed-column': props.stickyFirstColumn
+        'table-fixed-column': props.stickyFirstColumn,
       },
-      outerClass
+      outerClass,
     ]"
     @scroll="handleScroll"
   >
@@ -79,7 +81,7 @@ function handleScroll(event: Event) {
             class="w-[30px] border-r bg-inherit p-3"
             :class="{
               'sticky left-0 z-[2]': props.stickyFirstColumn,
-              'flex w-[70px] items-center justify-end': $slots.beforeCheckbox
+              'flex w-[70px] items-center justify-end': $slots.beforeCheckbox,
             }"
           >
             <input
@@ -99,10 +101,14 @@ function handleScroll(event: Event) {
               'sticky left-[38px] z-[3] bg-inherit':
                 props.stickyFirstColumn && header.key === headers[0].key,
               'sticky-column-shadow':
-                isScrolled && props.stickyFirstColumn && header.key === headers[0].key,
+                isScrolled &&
+                props.stickyFirstColumn &&
+                header.key === headers[0].key,
               '!left-0':
-                props.stickyFirstColumn && header.key === headers[0].key && !props.selectable,
-              [tableHeader || '']: tableHeader
+                props.stickyFirstColumn &&
+                header.key === headers[0].key &&
+                !props.selectable,
+              [tableHeader || '']: tableHeader,
             }"
           >
             {{ header.label }}
@@ -111,7 +117,10 @@ function handleScroll(event: Event) {
       </thead>
       <tbody class="w-full">
         <tr v-if="filteredItems.length <= 0">
-          <td class="bg-bg-primary py-5 text-center" :colspan="headers.length + 1">
+          <td
+            class="bg-bg-primary py-5 text-center"
+            :colspan="headers.length + 1"
+          >
             No results found.
           </td>
         </tr>
@@ -126,7 +135,8 @@ function handleScroll(event: Event) {
             class="z-[1] w-[30px] border-r p-3"
             :class="{
               'sticky left-0 z-[2] bg-inherit': props.stickyFirstColumn,
-              'flex w-[70px] items-center justify-between': $slots.beforeCheckbox
+              'flex w-[70px] items-center justify-between':
+                $slots.beforeCheckbox,
             }"
           >
             <div>
@@ -148,9 +158,13 @@ function handleScroll(event: Event) {
               'sticky left-[38px] z-[3] bg-inherit':
                 props.stickyFirstColumn && header.key === headers[0].key,
               'sticky-column-shadow':
-                isScrolled && props.stickyFirstColumn && header.key === headers[0].key,
+                isScrolled &&
+                props.stickyFirstColumn &&
+                header.key === headers[0].key,
               '!left-0':
-                props.stickyFirstColumn && header.key === headers[0].key && !props.selectable
+                props.stickyFirstColumn &&
+                header.key === headers[0].key &&
+                !props.selectable,
             }"
             @click.self="$emit('rowClick', item)"
           >

@@ -1,21 +1,22 @@
 export default () => {
-  const config = useRuntimeConfig()
-  const { data } = useAuth()
+  const config = useRuntimeConfig();
+  const { data } = useAuth();
 
-  const BASE_URL = config.public.baseURL
-  const headers: Record<string, string> = {}
+  const BASE_URL = config.public.baseURL;
+  const headers: Record<string, string> = {};
   const getAccessToken = () => {
-    return (data.value?.user as { accessToken?: string } | undefined)?.accessToken
-  }
+    return (data.value?.user as { accessToken?: string } | undefined)
+      ?.accessToken;
+  };
 
   if (import.meta.client && getAccessToken()) {
-    headers["Authorization"] = `Bearer ${getAccessToken()}`
+    headers["Authorization"] = `Bearer ${getAccessToken()}`;
   }
 
   type RequestOptions = {
-    headers?: Record<string, string>
-    [key: string]: unknown
-  }
+    headers?: Record<string, string>;
+    [key: string]: unknown;
+  };
 
   /**
    * Get Request
@@ -24,17 +25,17 @@ export default () => {
    * @returns Promise<T>
    */
   const get = async <T>(endpoint: string, options?: RequestOptions) => {
-    const accessToken = getAccessToken()
+    const accessToken = getAccessToken();
 
     if (accessToken && !headers["Authorization"]) {
-      headers["Authorization"] = `Bearer ${accessToken}`
+      headers["Authorization"] = `Bearer ${accessToken}`;
     }
 
     return rawFetch<T>(endpoint, {
       ...options,
-      headers
-    })
-  }
+      headers,
+    });
+  };
 
   /**
    * Post Request
@@ -45,8 +46,8 @@ export default () => {
   const rawFetch = async <T>(endpoint: string, options?: RequestOptions) =>
     $fetch<T>(endpoint, {
       baseURL: BASE_URL,
-      ...options
-    })
+      ...options,
+    });
 
   /**
    * Post Curry Function
@@ -61,8 +62,8 @@ export default () => {
         method,
         body,
         ...options,
-        headers
-      })
+        headers,
+      });
 
   /**
    * Post Request
@@ -71,7 +72,7 @@ export default () => {
    * @param options
    * @returns Promise<T>
    */
-  const post = postCurry("POST")
+  const post = postCurry("POST");
 
   /**
    * Patch Request
@@ -80,7 +81,7 @@ export default () => {
    * @param options
    * @returns Promise<T>
    */
-  const patch = postCurry("PATCH")
+  const patch = postCurry("PATCH");
 
   /**
    * Put Request
@@ -89,7 +90,7 @@ export default () => {
    * @param options
    * @returns Promise<T>
    */
-  const put = postCurry("PUT")
+  const put = postCurry("PUT");
 
   /**
    * Delete Request
@@ -98,7 +99,7 @@ export default () => {
    * @param options
    * @returns Promise<T>
    */
-  const destroy = postCurry("DELETE")
+  const destroy = postCurry("DELETE");
 
   return {
     get,
@@ -106,6 +107,6 @@ export default () => {
     post,
     patch,
     put,
-    destroy
-  }
-}
+    destroy,
+  };
+};

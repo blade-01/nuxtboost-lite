@@ -1,41 +1,43 @@
 <script lang="ts" setup>
 const props = defineProps<{
-  delay: number
-}>()
+  delay: number;
+}>();
 
-const countdown = ref(props.delay)
+const countdown = ref(props.delay);
 
-const canClick = computed(() => countdown.value === 0)
+const canClick = computed(() => countdown.value === 0);
 
 const emit = defineEmits<{
-  (e: "click"): void
-}>()
+  (e: "click"): void;
+}>();
 
 onMounted(() => {
-  setCoundown()
-})
+  setCoundown();
+});
 
 function setCoundown() {
   const interval = setInterval(() => {
-    countdown.value -= 1
+    countdown.value -= 1;
     if (countdown.value === 0) {
-      clearInterval(interval)
+      clearInterval(interval);
     }
-  }, 1000)
+  }, 1000);
 }
 
 const handleClick = () => {
   if (countdown.value === 0) {
-    countdown.value = props.delay
-    emit("click")
-    setCoundown()
+    countdown.value = props.delay;
+    emit("click");
+    setCoundown();
   }
-}
+};
 </script>
 
 <template>
   <a @click.prevent="handleClick">
     <slot />
-    <slot name="countdown" v-bind="{ canClick, countdown }"> {{ countdown }}s </slot>
+    <slot name="countdown" v-bind="{ canClick, countdown }">
+      {{ countdown }}s
+    </slot>
   </a>
 </template>

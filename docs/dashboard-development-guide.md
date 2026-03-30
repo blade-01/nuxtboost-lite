@@ -53,6 +53,8 @@ When adding new features, preserve that intent. Prefer reusable patterns over on
   Role and access helpers
 - `useAppFeedback.ts`
   Toast and modal abstraction
+- `useErrorMessage.ts`
+  Normalizes nested API and thrown error objects into one display-ready message
 - `useCharts.ts`
   Chart data and options
 - `useFetchApi.ts`
@@ -143,8 +145,8 @@ If a page is restricted:
 definePageMeta({
   layout: "dashboard",
   middleware: "role-access",
-  roles: ["admin", "member"]
-})
+  roles: ["admin", "member"],
+});
 ```
 
 If a sidebar link is restricted, add `roles` there too.
@@ -197,6 +199,26 @@ Current auth flow:
 3. `/auth/forgot-password`
 4. `/auth/otp`
 5. `/auth/reset-password`
+
+## 9. Feedback And Error Rules
+
+Prefer passing raw thrown errors into `useAppFeedback()` instead of manually reading
+`error.message`, `error.data`, or `error.data.message` inside pages.
+
+Examples:
+
+```ts
+const { toast } = useAppFeedback();
+
+try {
+  await someRequest();
+} catch (error) {
+  toast.danger(error);
+}
+```
+
+If a page needs the message without immediately showing a toast, use
+`useErrorMessage()` and call `getErrorMessage(error)`.
 
 Current redirects:
 
@@ -302,7 +324,7 @@ Recommended quick change in `pages/index.vue`:
 
 ```vue
 <script setup lang="ts">
-await navigateTo("/auth/signin")
+await navigateTo("/auth/signin");
 </script>
 ```
 

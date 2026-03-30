@@ -7,11 +7,11 @@ export default {
     requestPasswordReset: "/auth/request-password-reset",
     validatePasswordResetCode: "/auth/valid-password-reset",
     resetPassword: "/auth/reset-password",
-    signOut: "/auth/logout"
+    signOut: "/auth/logout",
   },
   user: {
     me: "/me",
     update: "/user-update",
-    enum: "/app/enum/user"
-  }
-}
+    enum: "/app/enum/user",
+  },
+};

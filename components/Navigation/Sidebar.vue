@@ -1,16 +1,16 @@
 <script setup lang="ts">
-const { visibleLinks, toggleDropdown } = useSidebarUtils()
-const props = defineProps<{ nav: boolean }>()
-const { nav } = toRefs(props)
+const { visibleLinks, toggleDropdown } = useSidebarUtils();
+const props = defineProps<{ nav: boolean }>();
+const { nav } = toRefs(props);
 const { closeSidebar } = inject("collapsible") as {
-  closeSidebar: () => void
-}
+  closeSidebar: () => void;
+};
 
 const handleLinkClick = () => {
   if (import.meta.client && window.innerWidth < 768) {
-    closeSidebar()
+    closeSidebar();
   }
-}
+};
 </script>
 
 <template>
@@ -52,7 +52,12 @@ const handleLinkClick = () => {
                 class="sidebar-item"
                 @click="handleLinkClick"
               >
-                <Icon v-if="link.icon" :name="link.icon" width="22" class="shrink-0 text-current" />
+                <Icon
+                  v-if="link.icon"
+                  :name="link.icon"
+                  width="22"
+                  class="shrink-0 text-current"
+                />
                 <span class="font-light">{{ link.name }}</span>
               </RouterLink>
             </span>
@@ -74,12 +79,20 @@ const handleLinkClick = () => {
                   name="mdi:chevron-down"
                   width="18"
                   class="text-current"
-                  :class="link?.show ? 'sidebar--active-chevron' : 'sidebar--inactive-chevron'"
+                  :class="
+                    link?.show
+                      ? 'sidebar--active-chevron'
+                      : 'sidebar--inactive-chevron'
+                  "
                 ></Icon>
               </span>
               <span
                 class="flex flex-col"
-                :class="[link?.show ? 'sidebar--active-collapse' : 'sidebar--inactive-collapse']"
+                :class="[
+                  link?.show
+                    ? 'sidebar--active-collapse'
+                    : 'sidebar--inactive-collapse',
+                ]"
               >
                 <span v-for="(sub, index) in link.sub" :key="index">
                   <span class="block pb-2 pl-[37px]">
@@ -105,7 +118,11 @@ const handleLinkClick = () => {
         </ul>
       </div>
       <div class="sidebar-footer">
-        <NuxtLink to="/" class="sidebar-item sidebar-footer-link" @click="handleLinkClick">
+        <NuxtLink
+          to="/"
+          class="sidebar-item sidebar-footer-link"
+          @click="handleLinkClick"
+        >
           <Icon name="mdi:logout" width="22" class="shrink-0 text-current" />
           <span class="font-medium">Logout</span>
         </NuxtLink>

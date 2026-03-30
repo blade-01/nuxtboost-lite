@@ -1,6 +1,6 @@
 // @ts-check
-import eslintConfigPrettier from "eslint-config-prettier"
-import withNuxt from "./.nuxt/eslint.config.mjs"
+import eslintConfigPrettier from "eslint-config-prettier";
+import withNuxt from "./.nuxt/eslint.config.mjs";
 
 export default withNuxt(
   {
@@ -14,8 +14,8 @@ export default withNuxt(
       "vue/require-default-prop": "off",
       "vue/v-on-event-hyphenation": "off",
       "no-console": ["warn", { allow: ["warn", "error"] }],
-      "no-debugger": "warn"
-    }
+      "no-debugger": "warn",
+    },
   },
   {
     name: "app/typescript-rules",
@@ -25,10 +25,10 @@ export default withNuxt(
         "warn",
         {
           argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_"
-        }
-      ]
-    }
+          varsIgnorePattern: "^_",
+        },
+      ],
+    },
   },
-  eslintConfigPrettier
-)
+  eslintConfigPrettier,
+);

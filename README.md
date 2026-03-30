@@ -74,6 +74,7 @@ utils/
 ### Composables
 
 - `composables/useAppFeedback.ts`
+- `composables/useErrorMessage.ts`
 - `composables/useFetchApi.ts`
 - `composables/usePvStyle.ts`
 - `composables/useSidebarUtils.ts`
@@ -158,7 +159,7 @@ If a developer wants the project to open on the sign-in page first, the fastest 
 
 ```vue
 <script setup lang="ts">
-await navigateTo("/auth/signin")
+await navigateTo("/auth/signin");
 </script>
 ```
 
@@ -204,6 +205,7 @@ It is meant to provide:
 - production-leaning starter pages
 - reusable validation and feedback patterns
 - a cleaner starting point than a blank Nuxt app
+- error-aware toast handling via `useAppFeedback()` and `useErrorMessage()`
 
 ## Notes
 

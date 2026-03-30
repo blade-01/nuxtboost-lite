@@ -1,32 +1,32 @@
 <script setup lang="ts">
 definePageMeta({
   layout: "auth",
-  middleware: "guest"
-})
+  middleware: "guest",
+});
 
 useHead({
-  title: "Verify OTP"
-})
+  title: "Verify OTP",
+});
 
-const route = useRoute()
-const router = useRouter()
-const { otpSchema } = useValidations()
+const route = useRoute();
+const router = useRouter();
+const { otpSchema } = useValidations();
 
 const recoveryEmail = computed(() => {
-  const value = route.query.email
-  return Array.isArray(value) ? value[0] || "" : value || ""
-})
+  const value = route.query.email;
+  return Array.isArray(value) ? value[0] || "" : value || "";
+});
 
 const submitOtp = async () => {
-  const { toast } = useAppFeedback()
-  await toast.success("OTP verified successfully.")
+  const { toast } = useAppFeedback();
+  await toast.success("OTP verified successfully.");
   await router.push({
     path: "/auth/reset-password",
     query: {
-      email: recoveryEmail.value
-    }
-  })
-}
+      email: recoveryEmail.value,
+    },
+  });
+};
 </script>
 
 <template>
@@ -52,7 +52,10 @@ const submitOtp = async () => {
       class="mt-8"
       @submit="submitOtp"
     >
-      <div class="input-group" :class="{ error: submitCount > 0 && errors.otp }">
+      <div
+        class="input-group"
+        :class="{ error: submitCount > 0 && errors.otp }"
+      >
         <label for="otp">
           Verification code
           <span class="required-mark">*</span>
@@ -78,7 +81,10 @@ const submitOtp = async () => {
         >
           Go back
         </NuxtLink>
-        <button type="button" class="text-text-secondary transition hover:text-text-primary">
+        <button
+          type="button"
+          class="text-text-secondary transition hover:text-text-primary"
+        >
           Resend code
         </button>
       </div>

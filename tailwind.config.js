@@ -69,100 +69,100 @@ module.exports = {
     "sm:align-middle",
     "sm:text-left",
     "sm:ml-4",
-    "sm:mt-0"
+    "sm:mt-0",
   ],
   theme: {
     extend: {
       colors: {
         btn: {
           primary: "#0f172a",
-          secondary: "#ffffff"
+          secondary: "#ffffff",
         },
         text: {
           primary: "#0f172a",
           secondary: "#475569",
           icon: "#64748b",
-          file: "#94a3b8"
+          file: "#94a3b8",
         },
         link: {
           primary: "#f1f5f9",
-          secondary: "#e2e8f0"
+          secondary: "#e2e8f0",
         },
         label: {
           primary: "#334155",
-          secondary: "#ffffff"
+          secondary: "#ffffff",
         },
         placeholder: {
           primary: "#94a3b8",
-          secondary: "#cbd5e1"
+          secondary: "#cbd5e1",
         },
         disabled: {
           primary: "#e2e8f0",
-          secondary: "#cbd5e1"
+          secondary: "#cbd5e1",
         },
         focus: {
           primary: "#94a3b8",
-          secondary: "#cbd5e1"
+          secondary: "#cbd5e1",
         },
         border: {
           primary: "#d7dee7",
-          secondary: "#cbd5e1"
+          secondary: "#cbd5e1",
         },
         bg: {
           primary: "#f5f7fb",
-          secondary: "#ffffff"
+          secondary: "#ffffff",
         },
         hover: {
           primary: "#e2e8f0",
-          secondary: "#cbd5e1"
+          secondary: "#cbd5e1",
         },
         checkbox: {
           primary: "#cbd5e1",
-          secondary: "#94a3b8"
+          secondary: "#94a3b8",
         },
         accent: {
           primary: "#0f172a",
-          secondary: "#475569"
+          secondary: "#475569",
         },
         sidebar: {
           primary: "#ffffff",
-          secondary: "#f8fafc"
+          secondary: "#f8fafc",
         },
         input: {
           primary: "#ffffff",
-          secondary: "#f8fafc"
+          secondary: "#f8fafc",
         },
         scroll: {
           track: "#eef2f7",
           trackSec: "#e2e8f0",
           thumb: "#cbd5e1",
-          thumbSec: "#94a3b8"
+          thumbSec: "#94a3b8",
         },
         filter: {
           primary: "#f8fafc",
-          secondary: "#f1f5f9"
+          secondary: "#f1f5f9",
         },
         selected: {
           primary: "#e8eef7",
           secondary: "#dbe7f5",
           hover: "#f1f5f9",
-          hoverSec: "#e2e8f0"
-        }
+          hoverSec: "#e2e8f0",
+        },
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
-        urbanist: ["Urbanist", "sans-serif"]
+        urbanist: ["Urbanist", "sans-serif"],
       },
       fontSize: {
-        nl: ["56px", "64px"]
+        nl: ["56px", "64px"],
       },
       screens: {
         "2xs": "200px",
         "1xs": "350px",
         "1xl": "1400px",
-        "3xl": "2000px"
-      }
-    }
+        "3xl": "2000px",
+      },
+    },
   },
   content: [
     `components/**/*.{vue,js}`,
@@ -172,6 +172,6 @@ module.exports = {
     `plugins/**/*.{js,ts}`,
     `node_modules/tailvue/dist/tailvue.es.js`,
     `App.{js,ts,vue}`,
-    `app.{js,ts,vue}`
-  ]
-}
+    `app.{js,ts,vue}`,
+  ],
+};

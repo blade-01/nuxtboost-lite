@@ -1,7 +1,7 @@
-interface SignInResponse {
-  result: boolean
-  message: string
+export interface SignInResponse {
+  result: boolean;
+  message: string;
   data: {
-    token: string
-  }
+    token: string;
+  };
 }

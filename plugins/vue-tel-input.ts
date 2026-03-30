@@ -1,6 +1,6 @@
-import VueTelInputPlugin from "vue-tel-input"
-import "vue-tel-input/vue-tel-input.css"
+import VueTelInputPlugin from "vue-tel-input";
+import "vue-tel-input/vue-tel-input.css";
 
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(VueTelInputPlugin)
-})
+  nuxtApp.vueApp.use(VueTelInputPlugin);
+});

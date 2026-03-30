@@ -1,34 +1,42 @@
-import { object, string, ref as yref, array, date, mixed, number } from "yup"
-import { isValidPhoneNumber } from "libphonenumber-js"
+import { object, string, ref as yref, array, date, mixed, number } from "yup";
+import { isValidPhoneNumber } from "libphonenumber-js";
 export default function () {
   // Validation messages
   const validation = {
     required: (field: string) => `${field} is required`,
     alphabet: (field: string) => `${field} should only contain alphabets`,
     url: (field: string) => `${field} should be a valid URL - https://...`,
-    min: (field: string, limit?: number) => `${field} must be at least ${limit} characters`,
-    max: (field: string, limit?: number) => `${field} must be at most ${limit} characters`,
+    min: (field: string, limit?: number) =>
+      `${field} must be at least ${limit} characters`,
+    max: (field: string, limit?: number) =>
+      `${field} must be at most ${limit} characters`,
     valid: (field: string) => `Please provide a valid ${field}`,
     password:
       "Provide a password with at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character",
-    password_confirmation: "Please ensure your passwords match"
-  }
+    password_confirmation: "Please ensure your passwords match",
+  };
 
-  const requiredStringField = (field: string) => string().required(validation.required(field))
+  const requiredStringField = (field: string) =>
+    string().required(validation.required(field));
 
   const requiredArrayField = (field: string) =>
     array()
       .of(string().required())
       .test("length", validation.required(field), (value) => value?.length > 0)
-      .required(validation.required(field))
+      .required(validation.required(field));
 
   const requiredDateField = (field: string) =>
-    date().required(validation.required(field)).typeError(validation.valid(field))
+    date()
+      .required(validation.required(field))
+      .typeError(validation.valid(field));
 
-  const requiredValueField = (field: string, predicate: (value: unknown) => boolean) =>
+  const requiredValueField = (
+    field: string,
+    predicate: (value: unknown) => boolean,
+  ) =>
     mixed()
       .required(validation.required(field))
-      .test("valid-value", validation.valid(field), predicate)
+      .test("valid-value", validation.valid(field), predicate);
 
   const emailField = (field = "Email") =>
     string()
@@ -36,16 +44,16 @@ export default function () {
       .email(validation.valid(field))
       .matches(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        validation.valid(field)
-      )
+        validation.valid(field),
+      );
 
   const passwordField = () =>
     string()
       .required(validation.password)
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+={}[\]:";'<>,.?\\/|!"#$%&'()*+,-./:;<=>?@^_`{|}~])(?=.{8,})/,
-        validation.password
-      )
+        validation.password,
+      );
 
   // Validation schema
   const mainSchema = object({
@@ -60,7 +68,9 @@ export default function () {
       .min(1, validation.min("Last name", 1))
       .max(100, validation.max("Last name", 100)),
     email: emailField(),
-    portfolio: string().url(validation.url("Portfolio")).required(validation.required("Portfolio")),
+    portfolio: string()
+      .url(validation.url("Portfolio"))
+      .required(validation.required("Portfolio")),
     currency: number()
       .required(validation.required("Currency"))
       .typeError(validation.valid("Currency")),
@@ -82,14 +92,14 @@ export default function () {
         !!value &&
         typeof value === "object" &&
         typeof value.month === "number" &&
-        typeof value.year === "number"
+        typeof value.year === "number",
     ),
     year: requiredValueField(
       "Year",
       (value) =>
         typeof value === "number" ||
         value instanceof Date ||
-        (typeof value === "object" && typeof value?.year === "number")
+        (typeof value === "object" && typeof value?.year === "number"),
     ),
     date_time: requiredDateField("Date Time"),
     time: requiredValueField(
@@ -98,22 +108,34 @@ export default function () {
         !!value &&
         typeof value === "object" &&
         typeof value.hours === "number" &&
-        typeof value.minutes === "number"
+        typeof value.minutes === "number",
     ),
     multiple: array()
       .of(date().required())
       .required(validation.required("Multiple Dates"))
-      .test("length", validation.required("Multiple Dates"), (value) => value.length > 0)
+      .test(
+        "length",
+        validation.required("Multiple Dates"),
+        (value) => value.length > 0,
+      )
       .typeError(validation.valid("Multiple Dates")),
     range: array()
       .of(date().required())
       .required(validation.required("Date Range"))
-      .test("length", validation.required("Date Range"), (value) => value.length > 0)
+      .test(
+        "length",
+        validation.required("Date Range"),
+        (value) => value.length > 0,
+      )
       .typeError(validation.valid("Date Range")),
-    phone_number: string().test("phone", validation.valid("Phone Number"), (value) => {
-      if (!value) return true
-      return isValidPhoneNumber(value)
-    }),
+    phone_number: string().test(
+      "phone",
+      validation.valid("Phone Number"),
+      (value) => {
+        if (!value) return true;
+        return isValidPhoneNumber(value);
+      },
+    ),
     autocomplete: requiredStringField("Autocomplete"),
     chips: requiredArrayField("Multiple Inputs"),
     file: mixed().required(validation.required("File")),
@@ -124,14 +146,18 @@ export default function () {
     image: mixed().required(validation.required("File")),
     images: array()
       .of(mixed().required())
-      .test("length", validation.required("Images"), (value) => value.length > 0)
-      .required(validation.required("Images"))
-  })
+      .test(
+        "length",
+        validation.required("Images"),
+        (value) => value.length > 0,
+      )
+      .required(validation.required("Images")),
+  });
 
   const signinSchema = object({
     email: emailField("Email"),
-    password: requiredStringField("Password")
-  })
+    password: requiredStringField("Password"),
+  });
 
   const signupSchema = object({
     full_name: string()
@@ -142,25 +168,25 @@ export default function () {
     password: passwordField(),
     password_confirmation: string()
       .required(validation.password_confirmation)
-      .oneOf([yref("password")], validation.password_confirmation)
-  })
+      .oneOf([yref("password")], validation.password_confirmation),
+  });
 
   const forgotPasswordSchema = object({
-    email: emailField("Email")
-  })
+    email: emailField("Email"),
+  });
 
   const otpSchema = object({
     otp: string()
       .required(validation.required("OTP"))
-      .matches(/^\d{4,6}$/, validation.valid("OTP"))
-  })
+      .matches(/^\d{4,6}$/, validation.valid("OTP")),
+  });
 
   const resetPasswordSchema = object({
     password: passwordField(),
     password_confirmation: string()
       .required(validation.password_confirmation)
-      .oneOf([yref("password")], validation.password_confirmation)
-  })
+      .oneOf([yref("password")], validation.password_confirmation),
+  });
 
   return {
     mainSchema,
@@ -168,6 +194,6 @@ export default function () {
     signupSchema,
     forgotPasswordSchema,
     otpSchema,
-    resetPasswordSchema
-  }
+    resetPasswordSchema,
+  };
 }

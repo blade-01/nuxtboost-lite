@@ -2,26 +2,26 @@
 definePageMeta({
   layout: "dashboard",
   middleware: "role-access",
-  roles: ["admin", "member", "staff"]
-})
+  roles: ["admin", "member", "staff"],
+});
 
 useHead({
-  title: "Operations"
-})
+  title: "Operations",
+});
 
-type SettlementStatus = "Queued" | "Review" | "Processing" | "Completed"
+type SettlementStatus = "Queued" | "Review" | "Processing" | "Completed";
 
 type OperationRow = {
-  _id: string
-  merchant: string
-  region: string
-  owner: string
-  status: SettlementStatus
-  flagged: boolean
-  volume: number
-  transactions: number
-  updated_at: string
-}
+  _id: string;
+  merchant: string;
+  region: string;
+  owner: string;
+  status: SettlementStatus;
+  flagged: boolean;
+  volume: number;
+  transactions: number;
+  updated_at: string;
+};
 
 const allRows = ref<OperationRow[]>([
   {
@@ -33,7 +33,7 @@ const allRows = ref<OperationRow[]>([
     flagged: false,
     volume: 2850000,
     transactions: 128,
-    updated_at: "2026-03-27T09:12:00"
+    updated_at: "2026-03-27T09:12:00",
   },
   {
     _id: "STL-20432",
@@ -44,7 +44,7 @@ const allRows = ref<OperationRow[]>([
     flagged: true,
     volume: 1640000,
     transactions: 64,
-    updated_at: "2026-03-27T08:50:00"
+    updated_at: "2026-03-27T08:50:00",
   },
   {
     _id: "STL-20433",
@@ -55,7 +55,7 @@ const allRows = ref<OperationRow[]>([
     flagged: false,
     volume: 3190000,
     transactions: 151,
-    updated_at: "2026-03-27T08:18:00"
+    updated_at: "2026-03-27T08:18:00",
   },
   {
     _id: "STL-20434",
@@ -66,7 +66,7 @@ const allRows = ref<OperationRow[]>([
     flagged: false,
     volume: 5240000,
     transactions: 208,
-    updated_at: "2026-03-27T07:41:00"
+    updated_at: "2026-03-27T07:41:00",
   },
   {
     _id: "STL-20435",
@@ -77,7 +77,7 @@ const allRows = ref<OperationRow[]>([
     flagged: true,
     volume: 910000,
     transactions: 39,
-    updated_at: "2026-03-27T07:06:00"
+    updated_at: "2026-03-27T07:06:00",
   },
   {
     _id: "STL-20436",
@@ -88,7 +88,7 @@ const allRows = ref<OperationRow[]>([
     flagged: false,
     volume: 2780000,
     transactions: 115,
-    updated_at: "2026-03-27T06:40:00"
+    updated_at: "2026-03-27T06:40:00",
   },
   {
     _id: "STL-20437",
@@ -99,7 +99,7 @@ const allRows = ref<OperationRow[]>([
     flagged: true,
     volume: 1360000,
     transactions: 58,
-    updated_at: "2026-03-27T06:01:00"
+    updated_at: "2026-03-27T06:01:00",
   },
   {
     _id: "STL-20438",
@@ -110,9 +110,9 @@ const allRows = ref<OperationRow[]>([
     flagged: false,
     volume: 760000,
     transactions: 27,
-    updated_at: "2026-03-27T05:36:00"
-  }
-])
+    updated_at: "2026-03-27T05:36:00",
+  },
+]);
 
 const tableHeaders = [
   { key: "merchant", label: "Merchant" },
@@ -122,55 +122,63 @@ const tableHeaders = [
   { key: "volume", label: "Volume" },
   { key: "status", label: "Status" },
   { key: "updated_at", label: "Updated" },
-  { key: "actions", label: "Actions" }
-]
+  { key: "actions", label: "Actions" },
+];
 
-const isLoading = ref(false)
-const { toast } = useAppFeedback()
+const isLoading = ref(false);
+const { toast } = useAppFeedback();
 
 const { filters, resetFilters, shareUrl } = useUrlFilters({
   search: {
     default: "",
-    parse: (value) => (Array.isArray(value) ? value[0] || "" : value || "")
+    parse: (value) => (Array.isArray(value) ? value[0] || "" : value || ""),
   },
   status: {
     default: "All" as SettlementStatus | "All",
     parse: (value) => {
-      const normalized = Array.isArray(value) ? value[0] : value
-      const allowedValues = ["All", "Queued", "Review", "Processing", "Completed"]
+      const normalized = Array.isArray(value) ? value[0] : value;
+      const allowedValues = [
+        "All",
+        "Queued",
+        "Review",
+        "Processing",
+        "Completed",
+      ];
       return allowedValues.includes(normalized || "")
         ? (normalized as SettlementStatus | "All")
-        : "All"
-    }
+        : "All";
+    },
   },
   region: {
     default: "All",
-    parse: (value) => (Array.isArray(value) ? value[0] || "All" : value || "All")
+    parse: (value) =>
+      Array.isArray(value) ? value[0] || "All" : value || "All",
   },
   flagged: {
     default: false,
     parse: (value) => {
-      const normalized = Array.isArray(value) ? value[0] : value
-      return normalized === "true" || normalized === "1"
+      const normalized = Array.isArray(value) ? value[0] : value;
+      return normalized === "true" || normalized === "1";
     },
-    serialize: (value) => (value ? "true" : undefined)
+    serialize: (value) => (value ? "true" : undefined),
   },
   page: {
     default: 1,
     parse: (value) => {
-      const normalized = Number(Array.isArray(value) ? value[0] : value)
-      return Number.isFinite(normalized) && normalized > 0 ? normalized : 1
+      const normalized = Number(Array.isArray(value) ? value[0] : value);
+      return Number.isFinite(normalized) && normalized > 0 ? normalized : 1;
     },
-    serialize: (value, defaultValue) => (value === defaultValue ? undefined : String(value))
+    serialize: (value, defaultValue) =>
+      value === defaultValue ? undefined : String(value),
   },
   pageSize: {
     default: 5,
     parse: (value) => {
-      const normalized = Number(Array.isArray(value) ? value[0] : value)
-      return normalized === 10 ? 10 : 5
-    }
-  }
-})
+      const normalized = Number(Array.isArray(value) ? value[0] : value);
+      return normalized === 10 ? 10 : 5;
+    },
+  },
+});
 
 const {
   search,
@@ -178,11 +186,14 @@ const {
   region: regionFilter,
   flagged: flaggedOnly,
   page,
-  pageSize
-} = filters
+  pageSize,
+} = filters;
 
-const pageSizeOptions = [5, 10]
-const regionOptions = computed(() => ["All", ...new Set(allRows.value.map((item) => item.region))])
+const pageSizeOptions = [5, 10];
+const regionOptions = computed(() => [
+  "All",
+  ...new Set(allRows.value.map((item) => item.region)),
+]);
 
 const filteredRows = computed(() => {
   return allRows.value.filter((item) => {
@@ -191,95 +202,99 @@ const filteredRows = computed(() => {
       [item.merchant, item.owner, item._id]
         .join(" ")
         .toLowerCase()
-        .includes(search.value.toLowerCase())
-    const matchesStatus = statusFilter.value === "All" || item.status === statusFilter.value
-    const matchesRegion = regionFilter.value === "All" || item.region === regionFilter.value
-    const matchesFlagged = !flaggedOnly.value || item.flagged
+        .includes(search.value.toLowerCase());
+    const matchesStatus =
+      statusFilter.value === "All" || item.status === statusFilter.value;
+    const matchesRegion =
+      regionFilter.value === "All" || item.region === regionFilter.value;
+    const matchesFlagged = !flaggedOnly.value || item.flagged;
 
-    return matchesSearch && matchesStatus && matchesRegion && matchesFlagged
-  })
-})
+    return matchesSearch && matchesStatus && matchesRegion && matchesFlagged;
+  });
+});
 
 const totalPages = computed(() =>
-  Math.max(1, Math.ceil(filteredRows.value.length / pageSize.value))
-)
+  Math.max(1, Math.ceil(filteredRows.value.length / pageSize.value)),
+);
 
 const paginatedRows = computed(() => {
-  const start = (page.value - 1) * pageSize.value
-  return filteredRows.value.slice(start, start + pageSize.value)
-})
+  const start = (page.value - 1) * pageSize.value;
+  return filteredRows.value.slice(start, start + pageSize.value);
+});
 
 const summaryCards = computed(() => {
-  const source = filteredRows.value
+  const source = filteredRows.value;
 
   return [
     {
       label: "Visible queue",
       value: source.length.toString(),
-      note: "Records matching the current filter state."
+      note: "Records matching the current filter state.",
     },
     {
       label: "Flagged settlements",
       value: source.filter((item) => item.flagged).length.toString(),
-      note: "Items requiring manual review or escalation."
+      note: "Items requiring manual review or escalation.",
     },
     {
       label: "Visible volume",
       value: formatCurrency(
         source.reduce((sum, item) => sum + item.volume, 0),
         "NGN",
-        "en-NG"
+        "en-NG",
       ),
-      note: "Combined settlement value in the current view."
+      note: "Combined settlement value in the current view.",
     },
     {
       label: "Processed today",
       value: source
-        .filter((item) => item.status === "Completed" || item.status === "Processing")
+        .filter(
+          (item) => item.status === "Completed" || item.status === "Processing",
+        )
         .length.toString(),
-      note: "Completed or in-flight items from today."
-    }
-  ]
-})
+      note: "Completed or in-flight items from today.",
+    },
+  ];
+});
 
 watch([search, statusFilter, regionFilter, flaggedOnly, pageSize], () => {
-  page.value = 1
-})
+  page.value = 1;
+});
 
 watch(totalPages, (value) => {
   if (page.value > value) {
-    page.value = value
+    page.value = value;
   }
-})
+});
 
 function clearFilters() {
-  resetFilters()
+  resetFilters();
 }
 
 function toggleLoadingState() {
-  isLoading.value = true
+  isLoading.value = true;
 
   setTimeout(() => {
-    isLoading.value = false
-  }, 1100)
+    isLoading.value = false;
+  }, 1100);
 }
 
 async function copyFilteredLink() {
   const valueToCopy = import.meta.client
     ? `${window.location.origin}${shareUrl.value}`
-    : shareUrl.value
+    : shareUrl.value;
 
   if (import.meta.client && navigator.clipboard) {
-    await navigator.clipboard.writeText(valueToCopy)
-    toast.success("Filtered link copied")
-    return
+    await navigator.clipboard.writeText(valueToCopy);
+    toast.success("Filtered link copied");
+    return;
   }
 
   toast.show({
     title: "Share link",
     message: valueToCopy,
-    type: "info"
-  })
+    type: "info",
+  });
 }
 </script>
 
@@ -303,7 +318,12 @@ async function copyFilteredLink() {
             class="btn-default"
             @click="copyFilteredLink"
           />
-          <UiBtn label="Clear filters" size="sm" class="btn-default" @click="clearFilters" />
+          <UiBtn
+            label="Clear filters"
+            size="sm"
+            class="btn-default"
+            @click="clearFilters"
+          />
         </div>
       </DashboardPageHero>
 
@@ -313,7 +333,9 @@ async function copyFilteredLink() {
           :key="card.label"
           class="rounded-[24px] border border-border-primary bg-white/90 p-5 shadow-sm shadow-slate-200/60"
         >
-          <p class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">
+          <p
+            class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+          >
             {{ card.label }}
           </p>
           <p class="mt-3 text-2xl font-semibold text-text-primary">
@@ -365,7 +387,11 @@ async function copyFilteredLink() {
               Region
             </span>
             <select v-model="regionFilter" class="input-style">
-              <option v-for="region in regionOptions" :key="region" :value="region">
+              <option
+                v-for="region in regionOptions"
+                :key="region"
+                :value="region"
+              >
                 {{ region }}
               </option>
             </select>
@@ -375,7 +401,11 @@ async function copyFilteredLink() {
             <span
               class="inline-flex items-center gap-3 rounded-[14px] border border-border-primary bg-slate-50 px-4 py-3 text-sm text-text-primary"
             >
-              <input v-model="flaggedOnly" type="checkbox" class="h-4 w-4 accent-slate-900" />
+              <input
+                v-model="flaggedOnly"
+                type="checkbox"
+                class="h-4 w-4 accent-slate-900"
+              />
               Flagged only
             </span>
           </label>
@@ -385,9 +415,13 @@ async function copyFilteredLink() {
       <section
         class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
       >
-        <div class="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div
+          class="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"
+        >
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+            >
               Settlement Queue
             </p>
             <h3 class="mt-2 text-2xl font-semibold text-text-primary">
@@ -400,7 +434,11 @@ async function copyFilteredLink() {
               v-model="pageSize"
               class="rounded-xl border border-border-primary bg-white px-3 py-2 text-sm text-text-primary shadow-sm"
             >
-              <option v-for="option in pageSizeOptions" :key="option" :value="option">
+              <option
+                v-for="option in pageSizeOptions"
+                :key="option"
+                :value="option"
+              >
                 {{ option }} / page
               </option>
             </select>
@@ -438,17 +476,24 @@ async function copyFilteredLink() {
             No settlements match this view.
           </p>
           <p class="mt-2 max-w-md text-sm leading-6 text-text-secondary">
-            Adjust the search or filters to widen the queue again. This gives the starter a proper
-            empty state instead of just a blank table.
+            Adjust the search or filters to widen the queue again. This gives
+            the starter a proper empty state instead of just a blank table.
           </p>
-          <UiBtn label="Reset filters" size="sm" class="mt-5" @click="clearFilters" />
+          <UiBtn
+            label="Reset filters"
+            size="sm"
+            class="mt-5"
+            @click="clearFilters"
+          />
         </div>
 
         <div v-else class="space-y-4">
           <UiDataTable :headers="tableHeaders" :items="paginatedRows">
             <template #merchant="item">
               <div>
-                <p class="font-semibold text-text-primary">{{ item.merchant }}</p>
+                <p class="font-semibold text-text-primary">
+                  {{ item.merchant }}
+                </p>
                 <p class="mt-1 text-xs text-text-secondary">{{ item._id }}</p>
               </div>
             </template>
@@ -474,7 +519,9 @@ async function copyFilteredLink() {
           <div
             class="flex flex-col gap-3 border-t border-border-primary pt-4 md:flex-row md:items-center md:justify-between"
           >
-            <p class="text-sm text-text-secondary">Page {{ page }} of {{ totalPages }}</p>
+            <p class="text-sm text-text-secondary">
+              Page {{ page }} of {{ totalPages }}
+            </p>
             <div class="flex items-center gap-2">
               <UiBtn
                 label="Previous"

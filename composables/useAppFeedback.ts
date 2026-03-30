@@ -1,152 +1,193 @@
-import { useModal, useToast } from "tailvue"
+import { useModal, useToast } from "tailvue";
 
-type ToastTone = "success" | "info" | "warning" | "danger" | "denied"
+type ToastTone = "success" | "info" | "warning" | "danger" | "denied";
+
+type ToastAction = {
+  label: string;
+  action?: () => void;
+};
 
 type ToastPayload =
   | string
   | {
-      title?: string
-      message: string
-      type?: ToastTone
-      timeout?: number
-      primary?: {
-        label: string
-        action?: () => void
-      }
-      secondary?: {
-        label: string
-        action?: () => void
-      }
-      wide?: boolean
-    }
+      title?: string;
+      message: string;
+      type?: ToastTone;
+      timeout?: number;
+      primary?: ToastAction;
+      secondary?: ToastAction;
+      wide?: boolean;
+    };
 
-type ModalTheme = "primary" | "danger" | "default" | "red" | "white"
+type ModalTheme = "primary" | "danger" | "default" | "red" | "white";
+type ToastInput = ToastPayload | unknown;
 
-let toastInstance: ReturnType<typeof useToast> | null = null
-let modalInstance: ReturnType<typeof useModal> | null = null
+let toastInstance: ReturnType<typeof useToast> | null = null;
+let modalInstance: ReturnType<typeof useModal> | null = null;
 
 const resolveToast = () => {
   if (!import.meta.client) {
-    return null
+    return null;
   }
 
   if (!toastInstance) {
-    toastInstance = useToast()
+    toastInstance = useToast();
   }
 
-  return toastInstance
-}
+  return toastInstance;
+};
 
 const resolveModal = () => {
   if (!import.meta.client) {
-    return null
+    return null;
   }
 
   if (!modalInstance) {
-    modalInstance = useModal()
+    modalInstance = useModal();
   }
 
-  return modalInstance
-}
+  return modalInstance;
+};
 
 const normalizeToastTheme = (type?: ToastTone) => {
   switch (type) {
     case "success":
-      return "success"
+      return "success";
     case "warning":
-      return "warning"
+      return "warning";
     case "danger":
-      return "danger"
+      return "danger";
     case "denied":
-      return "denied"
+      return "denied";
     default:
-      return "info"
+      return "info";
   }
-}
+};
 
 const normalizeModalTheme = (theme?: ModalTheme) => {
   if (theme === "red" || theme === "danger") {
-    return "red"
+    return "red";
   }
 
   if (theme === "white" || theme === "default") {
-    return "white"
+    return "white";
   }
 
-  return "indigo"
-}
+  return "indigo";
+};
 
 const withModalDelay = (action?: () => void | Promise<void>) => {
   if (!action) {
-    return undefined
+    return undefined;
   }
 
   return () =>
     new Promise<void>((resolve, reject) => {
       window.setTimeout(async () => {
         try {
-          await action()
-          resolve()
+          await action();
+          resolve();
         } catch (error) {
-          reject(error)
+          reject(error);
         }
-      }, 220)
-    })
-}
+      }, 220);
+    });
+};
 
 export default function () {
-  const showToast = (payload: ToastPayload, fallback: ToastTone = "info") => {
-    const toast = resolveToast()
+  const { getErrorMessage } = useErrorMessage();
 
-    if (!toast) {
-      return
+  const isToastPayloadObject = (
+    payload: unknown,
+  ): payload is Exclude<ToastPayload, string> => {
+    if (!payload || typeof payload !== "object" || !("message" in payload)) {
+      return false;
     }
 
-    if (typeof payload === "string") {
-      toast[normalizeToastTheme(fallback)](payload)
-      return
+    const keys = Object.keys(payload);
+    const toastOnlyKeys = [
+      "title",
+      "type",
+      "timeout",
+      "primary",
+      "secondary",
+      "wide",
+    ];
+
+    return (
+      keys.length === 1 ||
+      toastOnlyKeys.some((key) => Object.hasOwn(payload, key))
+    );
+  };
+
+  const normalizeToastPayload = (
+    payload: ToastInput,
+    fallback: ToastTone,
+  ): ToastPayload => {
+    if (typeof payload === "string" || isToastPayloadObject(payload)) {
+      return payload;
+    }
+
+    return {
+      message: getErrorMessage(payload),
+      type: fallback,
+    };
+  };
+
+  const showToast = (payload: ToastInput, fallback: ToastTone = "info") => {
+    const toast = resolveToast();
+
+    if (!toast) {
+      return;
+    }
+
+    const normalizedPayload = normalizeToastPayload(payload, fallback);
+
+    if (typeof normalizedPayload === "string") {
+      toast[normalizeToastTheme(fallback)](normalizedPayload);
+      return;
     }
 
     toast.show({
-      title: payload.title,
-      message: payload.message,
-      type: payload.type || fallback,
-      timeout: payload.timeout,
-      primary: payload.primary,
-      secondary: payload.secondary,
-      wide: payload.wide
-    })
-  }
+      title: normalizedPayload.title,
+      message: normalizedPayload.message,
+      type: normalizedPayload.type || fallback,
+      timeout: normalizedPayload.timeout,
+      primary: normalizedPayload.primary,
+      secondary: normalizedPayload.secondary,
+      wide: normalizedPayload.wide,
+    });
+  };
 
   return {
     toast: {
-      show: (payload: ToastPayload) => showToast(payload, "info"),
-      success: (payload: ToastPayload) => showToast(payload, "success"),
-      info: (payload: ToastPayload) => showToast(payload, "info"),
-      warning: (payload: ToastPayload) => showToast(payload, "warning"),
-      danger: (payload: ToastPayload) => showToast(payload, "danger"),
-      denied: (payload: ToastPayload) => showToast(payload, "denied")
+      show: (payload: ToastInput) => showToast(payload, "info"),
+      success: (payload: ToastInput) => showToast(payload, "success"),
+      info: (payload: ToastInput) => showToast(payload, "info"),
+      warning: (payload: ToastInput) => showToast(payload, "warning"),
+      danger: (payload: ToastInput) => showToast(payload, "danger"),
+      denied: (payload: ToastInput) => showToast(payload, "denied"),
     },
     modal: {
       show: (payload: {
-        type?: "primary" | "danger"
-        title?: string
-        body?: string
+        type?: "primary" | "danger";
+        title?: string;
+        body?: string;
         primary?: {
-          label: string
-          theme?: ModalTheme
-          action?: () => void | Promise<void>
-        }
+          label: string;
+          theme?: ModalTheme;
+          action?: () => void | Promise<void>;
+        };
         secondary?: {
-          label: string
-          theme?: ModalTheme
-          action?: () => void | Promise<void>
-        }
+          label: string;
+          theme?: ModalTheme;
+          action?: () => void | Promise<void>;
+        };
       }) => {
-        const modal = resolveModal()
+        const modal = resolveModal();
 
         if (!modal) {
-          return
+          return;
         }
 
         modal.show({
@@ -157,18 +198,18 @@ export default function () {
             ? {
                 label: payload.primary.label,
                 theme: normalizeModalTheme(payload.primary.theme),
-                action: withModalDelay(payload.primary.action)
+                action: withModalDelay(payload.primary.action),
               }
             : undefined,
           secondary: payload.secondary
             ? {
                 label: payload.secondary.label,
                 theme: normalizeModalTheme(payload.secondary.theme),
-                action: withModalDelay(payload.secondary.action)
+                action: withModalDelay(payload.secondary.action),
               }
-            : undefined
-        })
-      }
-    }
-  }
+            : undefined,
+        });
+      },
+    },
+  };
 }

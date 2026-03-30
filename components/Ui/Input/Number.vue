@@ -1,24 +1,24 @@
 <script lang="ts">
 export default {
-  inheritAttrs: false
-}
+  inheritAttrs: false,
+};
 </script>
 
 <script lang="ts" setup>
 defineProps<{
-  name: string
-  label?: string
-  error?: string
-  outerClasses?: string
-  required?: boolean
-  currency?: string
-  locale?: string
-  fractionDigits?: number
-  prependIcon?: string
-  appendIcon?: string
-}>()
+  name: string;
+  label?: string;
+  error?: string;
+  outerClasses?: string;
+  required?: boolean;
+  currency?: string;
+  locale?: string;
+  fractionDigits?: number;
+  prependIcon?: string;
+  appendIcon?: string;
+}>();
 
-const { inputNumberStyle } = usePvStyle()
+const { inputNumberStyle } = usePvStyle();
 </script>
 
 <template>
@@ -28,7 +28,7 @@ const { inputNumberStyle } = usePvStyle()
     class="input-group w-full"
     :class="{
       error: error,
-      [outerClasses || '']: outerClasses
+      [outerClasses || '']: outerClasses,
     }"
     v-slot="{ handleChange, value }"
   >
@@ -52,7 +52,7 @@ const { inputNumberStyle } = usePvStyle()
         :class="{
           'p-invalid !border-red-500': error,
           'app-field-control--with-prepend': prependIcon,
-          'app-field-control--with-append': appendIcon
+          'app-field-control--with-append': appendIcon,
         }"
         :currency="currency"
         :locale="locale"

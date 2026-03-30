@@ -1,26 +1,26 @@
 <script lang="ts">
 export default {
-  inheritAttrs: false
-}
+  inheritAttrs: false,
+};
 </script>
 
 <script setup lang="ts">
 interface Props {
-  label?: string
-  prependIcon?: boolean | string | "emoticon-sad"
-  appendIcon?: boolean | string | "emoticon-sad"
-  prependSize?: string
-  appendSize?: string
-  outerClass?: string
-  size?: "xs" | "sm" | "md" | "lg"
-  isLoading?: boolean
-  disabled?: boolean
+  label?: string;
+  prependIcon?: boolean | string | "emoticon-sad";
+  appendIcon?: boolean | string | "emoticon-sad";
+  prependSize?: string;
+  appendSize?: string;
+  outerClass?: string;
+  size?: "xs" | "sm" | "md" | "lg";
+  isLoading?: boolean;
+  disabled?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
   prependSize: "20",
-  appendSize: "20"
+  appendSize: "20",
   // size: "sm", // You can set default size if you want
-})
+});
 
 const sizes = computed(() => {
   return props.size === "xs"
@@ -31,18 +31,18 @@ const sizes = computed(() => {
         ? "btn-md"
         : props.size === "lg"
           ? "btn-lg"
-          : "btn"
-})
+          : "btn";
+});
 
-const button = ref<HTMLElement | null>(null)
+const button = ref<HTMLElement | null>(null);
 
 function triggerClick() {
-  button.value?.click()
+  button.value?.click();
 }
 
 defineExpose({
-  triggerClick
-})
+  triggerClick,
+});
 </script>
 
 <template>
@@ -50,12 +50,13 @@ defineExpose({
     v-bind="$attrs"
     :class="[
       {
-        'inline-flex items-center gap-2 text-current': prependIcon || appendIcon,
+        'inline-flex items-center gap-2 text-current':
+          prependIcon || appendIcon,
         '!pointer-events-none !cursor-not-allowed items-center justify-center !bg-opacity-70':
-          isLoading || disabled
+          isLoading || disabled,
       },
       outerClass,
-      sizes
+      sizes,
     ]"
     :disabled="isLoading"
     ref="button"
@@ -64,8 +65,9 @@ defineExpose({
       v-if="!isLoading"
       :class="[
         {
-          'inline-flex items-center gap-2 text-current': prependIcon || appendIcon
-        }
+          'inline-flex items-center gap-2 text-current':
+            prependIcon || appendIcon,
+        },
       ]"
     >
       <Icon

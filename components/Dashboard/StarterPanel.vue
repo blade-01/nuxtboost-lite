@@ -1,9 +1,9 @@
 <script setup lang="ts">
 defineProps<{
-  eyebrow?: string
-  title: string
-  description?: string
-}>()
+  eyebrow?: string;
+  title: string;
+  description?: string;
+}>();
 </script>
 
 <template>
@@ -11,7 +11,10 @@ defineProps<{
     class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
   >
     <div class="mb-5">
-      <p v-if="eyebrow" class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">
+      <p
+        v-if="eyebrow"
+        class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+      >
         {{ eyebrow }}
       </p>
       <h3 class="mt-2 text-2xl font-semibold text-text-primary">

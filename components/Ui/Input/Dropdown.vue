@@ -1,27 +1,27 @@
 <script lang="ts">
 export default {
-  inheritAttrs: false
-}
+  inheritAttrs: false,
+};
 </script>
 
 <script lang="ts" setup>
 defineProps<{
-  name: string
-  options: any[]
-  label?: string
-  error?: string
-  outerClasses?: string
-  required?: boolean
-  optionLabel?: string
-  optionValue?: string
-  filter?: boolean
-  disabled?: boolean
-  showClear?: boolean
-  prependIcon?: string
-  appendIcon?: string
-}>()
+  name: string;
+  options: any[];
+  label?: string;
+  error?: string;
+  outerClasses?: string;
+  required?: boolean;
+  optionLabel?: string;
+  optionValue?: string;
+  filter?: boolean;
+  disabled?: boolean;
+  showClear?: boolean;
+  prependIcon?: string;
+  appendIcon?: string;
+}>();
 
-const { dropdownStyle } = usePvStyle()
+const { dropdownStyle } = usePvStyle();
 </script>
 
 <template>
@@ -31,7 +31,7 @@ const { dropdownStyle } = usePvStyle()
     class="input-group w-full"
     :class="{
       error: error,
-      [outerClasses || '']: outerClasses
+      [outerClasses || '']: outerClasses,
     }"
     v-slot="{ handleChange, value }"
   >
@@ -55,7 +55,7 @@ const { dropdownStyle } = usePvStyle()
         :class="{
           'p-invalid !border !border-red-500': error,
           'app-field-control--with-prepend': prependIcon,
-          'app-field-control--with-append': appendIcon
+          'app-field-control--with-append': appendIcon,
         }"
         :pt="dropdownStyle"
         :options="options"

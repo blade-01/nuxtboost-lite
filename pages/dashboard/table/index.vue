@@ -1,59 +1,59 @@
 <script lang="ts" setup>
-const { toast, modal } = useAppFeedback()
+const { toast, modal } = useAppFeedback();
 definePageMeta({
   layout: "dashboard",
   middleware: "role-access",
-  roles: ["admin", "member", "staff"]
-})
+  roles: ["admin", "member", "staff"],
+});
 useHead({
-  title: "Table"
-})
+  title: "Table",
+});
 const headers = [
   {
     key: "name",
-    label: "Name"
+    label: "Name",
   },
   {
     key: "email",
-    label: "Email"
+    label: "Email",
   },
   {
     key: "phone_number",
-    label: "phone number"
+    label: "phone number",
   },
   {
     key: "role",
-    label: "Role"
+    label: "Role",
   },
   {
     key: "status",
-    label: "Status"
+    label: "Status",
   },
   {
     key: "location",
-    label: "location"
+    label: "location",
   },
   {
     key: "next_of_kin",
-    label: "next of kin"
+    label: "next of kin",
   },
   {
     key: "spouse",
-    label: "spouse"
+    label: "spouse",
   },
   {
     key: "family_tree",
-    label: "family tree"
+    label: "family tree",
   },
   {
     key: "created_at",
-    label: "created at"
+    label: "created at",
   },
   {
     key: "actions",
-    label: "Actions"
-  }
-]
+    label: "Actions",
+  },
+];
 
 const items = ref([
   {
@@ -67,7 +67,7 @@ const items = ref([
     next_of_kin: "Jane Doe",
     spouse: "Jane Doe",
     family_tree: "The Doe Family",
-    created_at: "2023-08-12"
+    created_at: "2023-08-12",
   },
   {
     _id: Math.random().toString().slice(2, 12).toLocaleUpperCase(),
@@ -80,17 +80,17 @@ const items = ref([
     next_of_kin: "Rebeka Michaelson",
     spouse: "Caroline Forbes",
     family_tree: "The Michaelson's",
-    created_at: "2023-08-5"
-  }
-])
-const selectedItems = ref<string[]>([])
+    created_at: "2023-08-5",
+  },
+]);
+const selectedItems = ref<string[]>([]);
 
 function handleRowClick(item: any) {
   toast.show({
     title: "Row Clicked",
     message: `Row with id ${item._id} was clicked`,
-    type: "info"
-  })
+    type: "info",
+  });
 }
 
 function requestDelete(itemId: string) {
@@ -102,17 +102,19 @@ function requestDelete(itemId: string) {
       label: "Delete",
       theme: "red",
       action: () => {
-        items.value = items.value.filter((item) => item._id !== itemId)
-        selectedItems.value = selectedItems.value.filter((item) => item !== itemId)
-        toast.success("Item deleted successfully")
-      }
+        items.value = items.value.filter((item) => item._id !== itemId);
+        selectedItems.value = selectedItems.value.filter(
+          (item) => item !== itemId,
+        );
+        toast.success("Item deleted successfully");
+      },
     },
     secondary: {
       label: "Cancel",
       theme: "white",
-      action: () => {}
-    }
-  })
+      action: () => {},
+    },
+  });
 }
 </script>
 
@@ -122,26 +124,45 @@ function requestDelete(itemId: string) {
       <section
         class="overflow-hidden rounded-[30px] border border-border-primary bg-[radial-gradient(circle_at_top_right,_rgba(15,23,42,0.08),_transparent_34%),linear-gradient(135deg,#ffffff_0%,#f8fafc_46%,#eef2f7_100%)] px-6 py-7 shadow-sm shadow-slate-200/70"
       >
-        <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div
+          class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
+        >
           <div class="max-w-2xl">
-            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-text-icon">
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.28em] text-text-icon"
+            >
               Data Surfaces
             </p>
-            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-text-primary">
-              Tables presented as live operations views instead of plain component samples.
+            <h2
+              class="mt-3 text-3xl font-semibold tracking-tight text-text-primary"
+            >
+              Tables presented as live operations views instead of plain
+              component samples.
             </h2>
             <p class="mt-3 text-sm leading-6 text-text-secondary">
-              Use the different table configurations below to compare density, selection, sticky
-              columns, and row actions in one place.
+              Use the different table configurations below to compare density,
+              selection, sticky columns, and row actions in one place.
             </p>
           </div>
-          <div class="grid gap-3 text-sm text-text-secondary sm:grid-cols-2 xl:grid-cols-3">
-            <div class="rounded-2xl border border-border-primary bg-white/80 px-4 py-3">
-              <p class="text-xs uppercase tracking-[0.22em] text-text-icon">Records</p>
-              <p class="mt-2 text-2xl font-semibold text-text-primary">{{ items.length }}</p>
+          <div
+            class="grid gap-3 text-sm text-text-secondary sm:grid-cols-2 xl:grid-cols-3"
+          >
+            <div
+              class="rounded-2xl border border-border-primary bg-white/80 px-4 py-3"
+            >
+              <p class="text-xs uppercase tracking-[0.22em] text-text-icon">
+                Records
+              </p>
+              <p class="mt-2 text-2xl font-semibold text-text-primary">
+                {{ items.length }}
+              </p>
             </div>
-            <div class="rounded-2xl border border-border-primary bg-white/80 px-4 py-3">
-              <p class="text-xs uppercase tracking-[0.22em] text-text-icon">Selected</p>
+            <div
+              class="rounded-2xl border border-border-primary bg-white/80 px-4 py-3"
+            >
+              <p class="text-xs uppercase tracking-[0.22em] text-text-icon">
+                Selected
+              </p>
               <p class="mt-2 text-2xl font-semibold text-text-primary">
                 {{ selectedItems.length }}
               </p>
@@ -149,8 +170,12 @@ function requestDelete(itemId: string) {
             <div
               class="rounded-2xl border border-border-primary bg-white/80 px-4 py-3 sm:col-span-2 xl:col-span-1"
             >
-              <p class="text-xs uppercase tracking-[0.22em] text-text-icon">Modes</p>
-              <p class="mt-2 font-medium text-text-primary">Basic, selectable, sticky, clickable</p>
+              <p class="text-xs uppercase tracking-[0.22em] text-text-icon">
+                Modes
+              </p>
+              <p class="mt-2 font-medium text-text-primary">
+                Basic, selectable, sticky, clickable
+              </p>
             </div>
           </div>
         </div>
@@ -162,13 +187,21 @@ function requestDelete(itemId: string) {
           class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
         >
           <div class="mb-4">
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">Mode One</p>
-            <p class="mt-2 text-2xl font-semibold text-text-primary">Basic Table</p>
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+            >
+              Mode One
+            </p>
+            <p class="mt-2 text-2xl font-semibold text-text-primary">
+              Basic Table
+            </p>
           </div>
           <UiDataTable :headers="headers" :items="items">
             <template #actions="item">
               <div class="flex space-x-2">
-                <UiBtn class="btn-btn-primary grid h-8 w-8 place-content-center !p-0">
+                <UiBtn
+                  class="btn-btn-primary grid h-8 w-8 place-content-center !p-0"
+                >
                   <Icon name="bx:edit" size="16" />
                 </UiBtn>
                 <UiBtn
@@ -188,19 +221,31 @@ function requestDelete(itemId: string) {
           class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
         >
           <div class="mb-4">
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">Mode Two</p>
-            <p class="mt-2 text-2xl font-semibold text-text-primary">Reshape-able Content Table</p>
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+            >
+              Mode Two
+            </p>
+            <p class="mt-2 text-2xl font-semibold text-text-primary">
+              Reshape-able Content Table
+            </p>
           </div>
           <UiDataTable :headers="headers" :items="items">
             <template #status="item">
-              <span class="badge" :class="getStatusBadge(item.status)">{{ item?.status }}</span>
+              <span class="badge" :class="getStatusBadge(item.status)">{{
+                item?.status
+              }}</span>
             </template>
             <template #created_at="item">
-              <span>{{ formatDate(item?.created_at, "DD MMM, YYYY hh:mm A") }}</span>
+              <span>{{
+                formatDate(item?.created_at, "DD MMM, YYYY hh:mm A")
+              }}</span>
             </template>
             <template #actions="item">
               <div class="flex space-x-2">
-                <UiBtn class="btn-btn-primary grid h-8 w-8 place-content-center !p-0">
+                <UiBtn
+                  class="btn-btn-primary grid h-8 w-8 place-content-center !p-0"
+                >
                   <Icon name="bx:edit" size="16" />
                 </UiBtn>
                 <UiBtn
@@ -220,10 +265,14 @@ function requestDelete(itemId: string) {
           class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
         >
           <div class="mb-4">
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+            >
               Mode Three
             </p>
-            <p class="mt-2 text-2xl font-semibold text-text-primary">Selectable Table</p>
+            <p class="mt-2 text-2xl font-semibold text-text-primary">
+              Selectable Table
+            </p>
           </div>
           <UiDataTable
             :headers="headers"
@@ -233,7 +282,9 @@ function requestDelete(itemId: string) {
           >
             <template #actions="item">
               <div class="flex space-x-2">
-                <UiBtn class="btn-btn-primary grid h-8 w-8 place-content-center !p-0">
+                <UiBtn
+                  class="btn-btn-primary grid h-8 w-8 place-content-center !p-0"
+                >
                   <Icon name="bx:edit" size="16" />
                 </UiBtn>
                 <UiBtn
@@ -253,10 +304,14 @@ function requestDelete(itemId: string) {
           class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
         >
           <div class="mb-4">
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+            >
               Mode Four
             </p>
-            <p class="mt-2 text-2xl font-semibold text-text-primary">Sticky Column Table</p>
+            <p class="mt-2 text-2xl font-semibold text-text-primary">
+              Sticky Column Table
+            </p>
           </div>
           <UiDataTable
             :headers="headers"
@@ -267,7 +322,9 @@ function requestDelete(itemId: string) {
           >
             <template #actions="item">
               <div class="flex space-x-2">
-                <UiBtn class="btn-btn-primary grid h-8 w-8 place-content-center !p-0">
+                <UiBtn
+                  class="btn-btn-primary grid h-8 w-8 place-content-center !p-0"
+                >
                   <Icon name="bx:edit" size="16" />
                 </UiBtn>
                 <UiBtn
@@ -287,10 +344,14 @@ function requestDelete(itemId: string) {
           class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
         >
           <div class="mb-4">
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon">
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+            >
               Mode Five
             </p>
-            <p class="mt-2 text-2xl font-semibold text-text-primary">Clickable Table</p>
+            <p class="mt-2 text-2xl font-semibold text-text-primary">
+              Clickable Table
+            </p>
           </div>
           <UiDataTable
             :headers="headers"
@@ -300,7 +361,9 @@ function requestDelete(itemId: string) {
           >
             <template #actions="item">
               <div class="flex space-x-2">
-                <UiBtn class="btn-btn-primary grid h-8 w-8 place-content-center !p-0">
+                <UiBtn
+                  class="btn-btn-primary grid h-8 w-8 place-content-center !p-0"
+                >
                   <Icon name="bx:edit" size="16" />
                 </UiBtn>
                 <UiBtn

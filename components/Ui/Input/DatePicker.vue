@@ -1,26 +1,26 @@
 <script lang="ts" setup>
-import { VueDatePicker } from "@vuepic/vue-datepicker"
+import { VueDatePicker } from "@vuepic/vue-datepicker";
 
 defineOptions({
-  inheritAttrs: false
-})
+  inheritAttrs: false,
+});
 
 const props = defineProps<{
-  name: string
-  label?: string
-  error?: string
-  outerClasses?: string
-  required?: boolean
-  disabled?: boolean
-  prependIcon?: string
-  appendIcon?: string
-  selectionMode?: "single" | "multiple" | "range"
-  view?: "date" | "month" | "year"
-  dateFormat?: string
-  showTime?: boolean
-  timeOnly?: boolean
-  hourFormat?: "12" | "24"
-}>()
+  name: string;
+  label?: string;
+  error?: string;
+  outerClasses?: string;
+  required?: boolean;
+  disabled?: boolean;
+  prependIcon?: string;
+  appendIcon?: string;
+  selectionMode?: "single" | "multiple" | "range";
+  view?: "date" | "month" | "year";
+  dateFormat?: string;
+  showTime?: boolean;
+  timeOnly?: boolean;
+  hourFormat?: "12" | "24";
+}>();
 
 const forwardedProps = computed(() => ({
   multiDates: props.selectionMode === "multiple",
@@ -37,13 +37,13 @@ const forwardedProps = computed(() => ({
         ? "MM/yyyy"
         : props.dateFormat === "yy"
           ? "yyyy"
-          : props.dateFormat
-}))
+          : props.dateFormat,
+}));
 
 const datePickerProps = computed(() => ({
   ...forwardedProps.value,
-  ...useAttrs()
-}))
+  ...useAttrs(),
+}));
 </script>
 
 <template>
@@ -53,7 +53,7 @@ const datePickerProps = computed(() => ({
     class="input-group w-full"
     :class="{
       error: error,
-      [outerClasses || '']: outerClasses
+      [outerClasses || '']: outerClasses,
     }"
     v-slot="{ handleChange, value }"
   >
@@ -83,7 +83,7 @@ const datePickerProps = computed(() => ({
           :input-class-name="[
             'datepicker-input',
             error ? 'datepicker-input-error' : '',
-            prependIcon ? '!pl-10' : ''
+            prependIcon ? '!pl-10' : '',
           ]"
           menu-class-name="datepicker-menu"
           calendar-class-name="datepicker-calendar"
@@ -94,7 +94,10 @@ const datePickerProps = computed(() => ({
           <input
             type="text"
             class="datepicker-input w-full"
-            :class="[error ? 'datepicker-input-error' : '', prependIcon ? '!pl-10' : '']"
+            :class="[
+              error ? 'datepicker-input-error' : '',
+              prependIcon ? '!pl-10' : '',
+            ]"
             :disabled="disabled"
             :placeholder="label"
           />
@@ -152,7 +155,9 @@ const datePickerProps = computed(() => ({
   z-index: 1300 !important;
 }
 
-:deep(.dp__pointer.dp__input_readonly.dp__input.dp__input_icon_pad.dp__input_reg) {
+:deep(
+  .dp__pointer.dp__input_readonly.dp__input.dp__input_icon_pad.dp__input_reg
+) {
   @apply app-control-shape;
 }
 </style>

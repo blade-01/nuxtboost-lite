@@ -1,19 +1,19 @@
 <script setup lang="ts">
-const nav = ref<boolean>(false)
+const nav = ref<boolean>(false);
 
 const toggleSidebar = () => {
-  nav.value = !nav.value
-}
+  nav.value = !nav.value;
+};
 
 const closeSidebar = () => {
-  nav.value = false
-}
+  nav.value = false;
+};
 
 provide("collapsible", {
   nav,
   toggleSidebar,
-  closeSidebar
-})
+  closeSidebar,
+});
 </script>
 
 <template>

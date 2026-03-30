@@ -1,6 +1,6 @@
 export function fileToURL(file: File) {
   if (file) {
-    return URL.createObjectURL(file)
+    return URL.createObjectURL(file);
   }
 }
 
@@ -9,13 +9,13 @@ export function forceDownloadFromURL(url: string, filename: string) {
 
   // Query Builder
 
-  const a = document.createElement("a")
+  const a = document.createElement("a");
 
-  a.href = url + "&download=1"
-  a.download = filename
-  a.click()
+  a.href = url + "&download=1";
+  a.download = filename;
+  a.click();
 
-  a.remove()
+  a.remove();
 
   // fetch(url)
   //   .then((response) => response.blob())
@@ -40,25 +40,25 @@ export function forceDownloadFromURL(url: string, filename: string) {
 
 export function isImage(file: File) {
   if (file) {
-    return /^image\//.test(file.type)
+    return /^image\//.test(file.type);
   }
 }
 
 export function formatSize(bytes: number) {
   if (bytes === 0) {
-    return "0 B"
+    return "0 B";
   }
 
-  const k = 1000
-  const dm = 0
-  const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  const k = 1000;
+  const dm = 0;
+  const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
 
 export function fileName(file: File) {
   if (file) {
-    return file.name
+    return file.name;
   }
 }

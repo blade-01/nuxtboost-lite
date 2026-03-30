@@ -1,19 +1,19 @@
 <script lang="ts">
 export default {
-  inheritAttrs: false
-}
+  inheritAttrs: false,
+};
 </script>
 
 <script lang="ts" setup>
 defineProps<{
-  name: string
-  prependIcon?: string
-  appendIcon?: string
-  label?: string
-  error?: string
-  outerClasses?: string
-  required?: boolean
-}>()
+  name: string;
+  prependIcon?: string;
+  appendIcon?: string;
+  label?: string;
+  error?: string;
+  outerClasses?: string;
+  required?: boolean;
+}>();
 </script>
 
 <template>
@@ -21,7 +21,7 @@ defineProps<{
     class="input-group"
     :class="{
       error: error,
-      [outerClasses || '']: outerClasses
+      [outerClasses || '']: outerClasses,
     }"
   >
     <label v-if="label" :for="name">
@@ -43,7 +43,7 @@ defineProps<{
         v-bind="$attrs"
         class="input-style"
         :class="{
-          '!pl-10': prependIcon
+          '!pl-10': prependIcon,
         }"
       />
       <button

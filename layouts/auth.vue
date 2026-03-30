@@ -19,14 +19,19 @@
             Ship admin and SaaS interfaces without rebuilding the foundation.
           </h1>
           <p class="mt-4 text-sm leading-7 text-slate-300">
-            Auth screens, dashboard modules, reusable inputs, charts, tables, and feedback flows are
-            already in place so teams can move straight to product work.
+            Auth screens, dashboard modules, reusable inputs, charts, tables,
+            and feedback flows are already in place so teams can move straight
+            to product work.
           </p>
         </div>
         <div class="grid gap-4">
           <div class="rounded-3xl border border-white/10 bg-white/10 p-5">
-            <p class="text-xs uppercase tracking-[0.24em] text-slate-300">Included</p>
-            <p class="mt-2 text-lg font-medium">Auth, analytics, billing, team, settings</p>
+            <p class="text-xs uppercase tracking-[0.24em] text-slate-300">
+              Included
+            </p>
+            <p class="mt-2 text-lg font-medium">
+              Auth, analytics, billing, team, settings
+            </p>
           </div>
           <NuxtLink
             to="/"
@@ -37,7 +42,9 @@
           </NuxtLink>
         </div>
       </section>
-      <section class="flex flex-1 items-center justify-center px-5 py-10 md:px-10">
+      <section
+        class="flex flex-1 items-center justify-center px-5 py-10 md:px-10"
+      >
         <div class="w-full max-w-xl">
           <slot />
         </div>

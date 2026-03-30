@@ -1,10 +1,10 @@
 <script setup lang="ts">
 defineProps<{
-  eyebrow?: string
-  title: string
-  description: string
-  align?: "left" | "between"
-}>()
+  eyebrow?: string;
+  title: string;
+  description: string;
+  align?: "left" | "between";
+}>();
 </script>
 
 <template>
@@ -13,13 +13,20 @@ defineProps<{
   >
     <div
       class="flex flex-col gap-6"
-      :class="align === 'between' ? 'lg:flex-row lg:items-end lg:justify-between' : ''"
+      :class="
+        align === 'between' ? 'lg:flex-row lg:items-end lg:justify-between' : ''
+      "
     >
       <div class="max-w-3xl">
-        <p v-if="eyebrow" class="text-xs font-semibold uppercase tracking-[0.28em] text-text-icon">
+        <p
+          v-if="eyebrow"
+          class="text-xs font-semibold uppercase tracking-[0.28em] text-text-icon"
+        >
           {{ eyebrow }}
         </p>
-        <h2 class="mt-3 text-3xl font-semibold tracking-tight text-text-primary">
+        <h2
+          class="mt-3 text-3xl font-semibold tracking-tight text-text-primary"
+        >
           {{ title }}
         </h2>
         <p class="mt-3 text-sm leading-6 text-text-secondary md:text-base">

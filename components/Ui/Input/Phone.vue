@@ -1,40 +1,40 @@
 <script lang="ts">
 export default {
-  inheritAttrs: false
-}
+  inheritAttrs: false,
+};
 </script>
 
 <script setup lang="ts">
 // vueTelInput
 defineProps<{
-  name: string
-  label?: string
-  error?: string
-  outerClasses?: string
-  required?: boolean
-  modelValue?: string
-  prependIcon?: string
-  appendIcon?: string
-}>()
+  name: string;
+  label?: string;
+  error?: string;
+  outerClasses?: string;
+  required?: boolean;
+  modelValue?: string;
+  prependIcon?: string;
+  appendIcon?: string;
+}>();
 const emits = defineEmits<{
-  (event: "update:modelValue", value: string | undefined): void
-  (event: "update:error", value: boolean): void
-}>()
+  (event: "update:modelValue", value: string | undefined): void;
+  (event: "update:error", value: boolean): void;
+}>();
 
-const localError = ref<string | undefined>()
+const localError = ref<string | undefined>();
 
 interface CountryCodeResponse {
-  countryCallingCode?: string
-  nationalNumber?: string
-  number?: string
+  countryCallingCode?: string;
+  nationalNumber?: string;
+  number?: string;
   country: {
-    name: string
-    iso2: string
-    dialCode: string
-  }
-  countryCode?: string
-  valid?: boolean
-  formatted: string
+    name: string;
+    iso2: string;
+    dialCode: string;
+  };
+  countryCode?: string;
+  valid?: boolean;
+  formatted: string;
 }
 
 const handleValidation = (value: string, phoneObject: CountryCodeResponse) => {
@@ -44,21 +44,24 @@ const handleValidation = (value: string, phoneObject: CountryCodeResponse) => {
   //   localError.value = undefined;
   //   emits("update:error", false);
   // }
-  emits("update:modelValue", phoneObject.number ? phoneObject.number : phoneObject.formatted)
-}
+  emits(
+    "update:modelValue",
+    phoneObject.number ? phoneObject.number : phoneObject.formatted,
+  );
+};
 
 const options = ref({
   inputOptions: {
     autocomplete: "off",
     showDialCode: true,
-    placeholder: ""
+    placeholder: "",
   },
   dropdownOptions: {
     showDialCodeInList: true,
     showFlags: true,
-    showSearchBox: true
-  }
-})
+    showSearchBox: true,
+  },
+});
 </script>
 
 <template>
@@ -69,7 +72,7 @@ const options = ref({
     class="input-group w-full"
     :class="{
       error: error,
-      [outerClasses || '']: outerClasses
+      [outerClasses || '']: outerClasses,
     }"
   >
     <label v-if="label" :for="name">
@@ -91,13 +94,13 @@ const options = ref({
         :model-value="value"
         v-bind="options"
         :class="{
-          error: error || localError
+          error: error || localError,
         }"
         @on-input="handleValidation"
         @update:model-value="
           (val: any) => {
             if (val) {
-              handleChange(val, val.length > 4)
+              handleChange(val, val.length > 4);
             }
           }
         "

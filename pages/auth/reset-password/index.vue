@@ -1,32 +1,34 @@
 <script setup lang="ts">
 definePageMeta({
   layout: "auth",
-  middleware: "guest"
-})
+  middleware: "guest",
+});
 
 useHead({
-  title: "Set New Password"
-})
+  title: "Set New Password",
+});
 
-const route = useRoute()
-const router = useRouter()
-const { resetPasswordSchema } = useValidations()
+const route = useRoute();
+const router = useRouter();
+const { resetPasswordSchema } = useValidations();
 
 const recoveryEmail = computed(() => {
-  const value = route.query.email
-  return Array.isArray(value) ? value[0] || "" : value || ""
-})
+  const value = route.query.email;
+  return Array.isArray(value) ? value[0] || "" : value || "";
+});
 
 const submitPasswordReset = async () => {
-  const { toast } = useAppFeedback()
-  await toast.success("Password updated successfully.")
-  await router.push("/auth/signin")
-}
+  const { toast } = useAppFeedback();
+  await toast.success("Password updated successfully.");
+  await router.push("/auth/signin");
+};
 </script>
 
 <template>
   <div>
-    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-text-icon">New password</p>
+    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-text-icon">
+      New password
+    </p>
     <h1 class="mt-3 text-4xl font-semibold tracking-tight text-text-primary">
       Set a fresh password for your account.
     </h1>
@@ -44,7 +46,12 @@ const submitPasswordReset = async () => {
       class="mt-8"
       @submit="submitPasswordReset"
     >
-      <UiInputPassword name="password" label="New password" required :error="errors.password" />
+      <UiInputPassword
+        name="password"
+        label="New password"
+        required
+        :error="errors.password"
+      />
       <UiInputPassword
         name="password_confirmation"
         label="Confirm new password"
