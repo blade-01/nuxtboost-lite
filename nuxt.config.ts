@@ -8,62 +8,74 @@ export default defineNuxtConfig({
         { charset: "utf-8" },
         {
           name: "description",
-          content: "NuxtBoost is a Nuxt starter for SaaS dashboards and admin interfaces."
+          content:
+            "NuxtBoost is a Nuxt starter for SaaS dashboards and admin interfaces.",
         },
         {
           property: "og:type",
-          content: "website"
+          content: "website",
         },
         {
           property: "og:url",
-          content: "https://nuxtboost-lite.vercel.app"
+          content: "https://nuxtboost-lite.vercel.app",
         },
         {
           property: "og:title",
-          content: "NuxtBoost | Reusable Nuxt starter for SaaS dashboards and admin interfaces."
+          content:
+            "NuxtBoost | Reusable Nuxt starter for SaaS dashboards and admin interfaces.",
         },
         {
           property: "og:description",
-          content: "NuxtBoost is a Nuxt starter for SaaS dashboards and admin interfaces."
+          content:
+            "NuxtBoost is a Nuxt starter for SaaS dashboards and admin interfaces.",
         },
         {
           property: "og:image",
-          content: "https://res.cloudinary.com/bladencove/image/upload/v1700328807/RC/nb-light.svg"
+          content:
+            "https://res.cloudinary.com/bladencove/image/upload/v1700328807/RC/nb-light.svg",
         },
         {
           property: "twitter:card",
-          content: "summary_large_image"
+          content: "summary_large_image",
         },
         {
           property: "twitter:url",
-          content: "https://nuxtboost-lite.vercel.app"
+          content: "https://nuxtboost-lite.vercel.app",
         },
         {
           property: "twitter:title",
-          content: "NuxtBoost | Reusable Nuxt starter for SaaS dashboards and admin interfaces."
+          content:
+            "NuxtBoost | Reusable Nuxt starter for SaaS dashboards and admin interfaces.",
         },
         {
           property: "twitter:description",
-          content: "NuxtBoost is a Nuxt starter for SaaS dashboards and admin interfaces."
+          content:
+            "NuxtBoost is a Nuxt starter for SaaS dashboards and admin interfaces.",
         },
         {
           property: "twitter:image",
-          content: "https://res.cloudinary.com/bladencove/image/upload/v1700328807/RC/nb-light.svg"
+          content:
+            "https://res.cloudinary.com/bladencove/image/upload/v1700328807/RC/nb-light.svg",
         },
         { name: "theme-color", content: "#ffffff" },
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
-        }
+          content:
+            "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0",
+        },
       ],
-      link: [{ rel: "icon", href: "/favicon.ico" }]
-    }
+      link: [{ rel: "icon", href: "/favicon.ico" }],
+    },
   },
   devtools: { enabled: true },
   css: ["primeicons/primeicons.css", "@vuepic/vue-datepicker/dist/main.css"],
-  plugins: ["~/plugins/vue-tel-input.ts", "~/plugins/primevue.ts", "~/plugins/tailvue.client.ts"],
+  plugins: [
+    "~/plugins/vue-tel-input.ts",
+    "~/plugins/primevue.ts",
+    "~/plugins/tailvue.client.ts",
+  ],
   build: {
-    transpile: ["primevue"]
+    transpile: ["primevue"],
   },
   vite: {
     optimizeDeps: {
@@ -75,9 +87,9 @@ export default defineNuxtConfig({
         "vue-tel-input",
         "tailvue",
         "@primeuix/themes",
-        "@primeuix/themes/aura"
-      ]
-    }
+        "@primeuix/themes/aura",
+      ],
+    },
   },
   /**
    * Environment variables
@@ -85,8 +97,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     authSecret: process.env.AUTH_SECRET,
     public: {
-      baseURL: process.env.API_BASE_URL
-    }
+      baseURL: process.env.API_BASE_URL,
+    },
   },
   /**
    * Modules configuration
@@ -98,36 +110,36 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@nuxt/icon",
     "@vee-validate/nuxt",
-    "@sidebase/nuxt-auth"
+    "@sidebase/nuxt-auth",
   ],
   imports: {
-    dirs: ["utils"]
+    dirs: ["utils"],
   },
   eslint: {
-    checker: false
+    checker: false,
   },
   /**
    * VeeValidate Configuration
    */
   veeValidate: {
-    autoImports: true
+    autoImports: true,
   },
   /**
    * External Image Provider Configuration
    */
   image: {
     cloudinary: {
-      baseURL: "https://res.cloudinary.com/bladencove/image/upload/RC"
-    }
+      baseURL: "https://res.cloudinary.com/bladencove/image/upload/RC",
+    },
   },
   /**
    * nuxt-auth configuration
    */
   auth: {
     baseURL: `${process.env.AUTH_ORIGIN}/api/auth`,
-    originEnvKey: false,
+    originEnvKey: "",
     provider: {
-      type: "authjs"
-    }
-  }
-})
+      type: "authjs",
+    },
+  },
+});
