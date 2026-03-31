@@ -200,6 +200,89 @@ Current auth flow:
 4. `/auth/otp`
 5. `/auth/reset-password`
 
+Every public auth page should keep this metadata unless there is a specific
+reason not to:
+
+```ts
+definePageMeta({
+  layout: "auth",
+  middleware: "guest",
+});
+```
+
+Why it matters:
+
+- `layout: "auth"` keeps the shared auth shell from `layouts/auth.vue`
+- `middleware: "guest"` prevents authenticated users from revisiting sign-in,
+  sign-up, OTP, and reset screens
+- `middleware/guest.ts` uses `useAuth()` from `@sidebase/nuxt-auth` to decide
+  whether to redirect
+
+Authenticated pages should also opt into Sidebase Auth protection in page
+metadata. For pages that require a signed-in session, add the auth middleware
+alongside the page layout and any role checks:
+
+```ts
+definePageMeta({
+  layout: "dashboard",
+  middleware: ["sidebase-auth", "role-access"],
+  roles: ["admin", "member"],
+});
+```
+
+Use `middleware: "sidebase-auth"` or `middleware: ["sidebase-auth", ...]` when the page should not
+be accessible without an authenticated session. Then layer starter-specific
+authorization such as `role-access` on top when the page is not for every signed-in user.
+
+The auth stack in this starter is built on `@sidebase/nuxt-auth`.
+
+Key files:
+
+- `nuxt.config.ts`
+  Holds the Nuxt Auth config under `auth`
+- `server/api/auth/[...].ts`
+  Defines `NuxtAuthHandler`, credentials sign-in, JWT/session callbacks, and the
+  custom sign-in page path
+- `middleware/guest.ts`
+  Redirects authenticated users away from public auth pages
+- `pages/auth/*`
+  Holds the actual auth screen routes and page-level redirects
+
+When updating auth pages, keep these rules in mind:
+
+- If a page is part of the unauthenticated flow, keep it under `pages/auth/*`
+- If a page requires a signed-in user, protect it with Sidebase Auth middleware in `definePageMeta`
+- Keep `pages.signIn` in `server/api/auth/[...].ts` pointing to the actual sign-in route
+- If you rename or move `/auth/signin`, update both the file path and the auth handler config
+- If you change what happens after sign-in, sign-up, OTP, or reset password, update the route redirects in those page files
+- If you change token or session data shape, update the `jwt` and `session` callbacks in `server/api/auth/[...].ts`
+- Prefer `useAuth()` for auth state checks and `useAppFeedback()` for auth success/error feedback in pages
+
+Starter pattern for a new auth page:
+
+```vue
+<script setup lang="ts">
+definePageMeta({
+  layout: "auth",
+  middleware: "guest",
+});
+
+useHead({
+  title: "Your Auth Step",
+});
+
+const { toast } = useAppFeedback();
+
+const submit = async () => {
+  try {
+    // auth action here
+  } catch (error) {
+    toast.danger(error);
+  }
+};
+</script>
+```
+
 ## 9. Feedback And Error Rules
 
 Prefer passing raw thrown errors into `useAppFeedback()` instead of manually reading

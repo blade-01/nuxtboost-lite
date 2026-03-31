@@ -5,12 +5,17 @@ export default {
 </script>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   name: string;
   label?: string;
   error?: string;
   requiredMark?: boolean;
   outerClasses?: string;
+  modelValue?: boolean;
+}>();
+
+const emit = defineEmits<{
+  "update:modelValue": [value: boolean];
 }>();
 </script>
 
@@ -29,16 +34,28 @@ defineProps<{
       type="button"
       class="inline-flex items-center gap-3"
       role="switch"
-      :aria-checked="Boolean(value)"
-      @click="handleChange(!Boolean(value))"
+      :aria-checked="Boolean(props.modelValue ?? value)"
+      @click="
+        () => {
+          const nextValue = !Boolean(props.modelValue ?? value);
+          handleChange(nextValue);
+          emit('update:modelValue', nextValue);
+        }
+      "
     >
       <span
         class="relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors duration-200"
-        :class="Boolean(value) ? 'bg-slate-900' : 'bg-slate-300'"
+        :class="
+          Boolean(props.modelValue ?? value) ? 'bg-slate-900' : 'bg-slate-300'
+        "
       >
         <span
           class="absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200"
-          :class="Boolean(value) ? 'translate-x-5' : 'translate-x-0'"
+          :class="
+            Boolean(props.modelValue ?? value)
+              ? 'translate-x-5'
+              : 'translate-x-0'
+          "
         />
       </span>
       <span

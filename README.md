@@ -165,6 +165,10 @@ await navigateTo("/auth/signin");
 
 That keeps the rest of the auth flow intact while making sign-in the first page a user sees.
 
+Auth flow implementation details, including `definePageMeta`, `@sidebase/nuxt-auth`,
+guest middleware, and protected-page rules, are documented in
+`docs/dashboard-development-guide.md`.
+
 ## Recommended First Edits
 
 When using this starter for a new product, update these first:

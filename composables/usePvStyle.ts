@@ -12,7 +12,7 @@ export default () => {
       root: {
         class: fieldRootClass,
       },
-      label: { class: fieldInputClass },
+      label: { class: `${fieldInputClass} !pb-0 !pt-3` },
       dropdown: {
         class: "flex w-11 items-center justify-center text-text-icon",
       },

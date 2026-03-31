@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-defineProps<{
+const props = defineProps<{
   name: string;
   options: any[];
   label?: string;
@@ -19,6 +19,11 @@ defineProps<{
   showClear?: boolean;
   prependIcon?: string;
   appendIcon?: string;
+  modelValue?: any;
+}>();
+
+const emit = defineEmits<{
+  "update:modelValue": [value: any];
 }>();
 
 const { dropdownStyle } = usePvStyle();
@@ -50,7 +55,7 @@ const { dropdownStyle } = usePvStyle();
         </slot>
       </button>
       <PvSelect
-        :model-value="value"
+        :model-value="props.modelValue ?? value"
         class="app-field-control app-field-control--select w-full"
         :class="{
           'p-invalid !border !border-red-500': error,
@@ -65,7 +70,12 @@ const { dropdownStyle } = usePvStyle();
         :disabled="disabled"
         :show-clear="showClear"
         v-bind="$attrs"
-        @update:modelValue="handleChange"
+        @update:modelValue="
+          (nextValue: any) => {
+            handleChange(nextValue);
+            emit('update:modelValue', nextValue);
+          }
+        "
       ></PvSelect>
       <button
         v-if="appendIcon"

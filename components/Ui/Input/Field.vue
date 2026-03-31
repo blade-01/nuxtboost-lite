@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-defineProps<{
+const props = defineProps<{
   name: string;
   prependIcon?: string;
   appendIcon?: string;
@@ -13,6 +13,11 @@ defineProps<{
   error?: string;
   outerClasses?: string;
   required?: boolean;
+  modelValue?: string | number;
+}>();
+
+const emit = defineEmits<{
+  "update:modelValue": [value: string | number | undefined];
 }>();
 </script>
 
@@ -40,11 +45,13 @@ defineProps<{
       </button>
       <Field
         :name="name"
+        :model-value="props.modelValue"
         v-bind="$attrs"
         class="input-style"
         :class="{
           '!pl-10': prependIcon,
         }"
+        @update:modelValue="emit('update:modelValue', $event)"
       />
       <button
         v-if="appendIcon"

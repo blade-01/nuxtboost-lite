@@ -190,6 +190,13 @@ const {
 } = filters;
 
 const pageSizeOptions = [5, 10];
+const statusOptions: Array<SettlementStatus | "All"> = [
+  "All",
+  "Queued",
+  "Review",
+  "Processing",
+  "Completed",
+];
 const regionOptions = computed(() => [
   "All",
   ...new Set(allRows.value.map((item) => item.region)),
@@ -351,64 +358,42 @@ async function copyFilteredLink() {
         class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
       >
         <div class="grid gap-4 lg:grid-cols-[1.4fr_0.8fr_0.8fr_auto]">
-          <label class="block">
-            <span
-              class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-text-icon"
-            >
-              Search
-            </span>
-            <input
-              v-model="search"
-              type="text"
-              class="input-style"
-              placeholder="Search merchant, owner, or settlement ID"
-            />
-          </label>
+          <UiInputField
+            name="operations-search"
+            v-model="search"
+            label="Search"
+            outer-classes="mb-0"
+            placeholder="Search merchant, owner, or settlement ID"
+          />
 
-          <label class="block">
-            <span
-              class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-text-icon"
-            >
-              Status
-            </span>
-            <select v-model="statusFilter" class="input-style">
-              <option value="All">All statuses</option>
-              <option value="Queued">Queued</option>
-              <option value="Review">Review</option>
-              <option value="Processing">Processing</option>
-              <option value="Completed">Completed</option>
-            </select>
-          </label>
+          <UiInputDropdown
+            name="operations-status-filter"
+            v-model="statusFilter"
+            :options="statusOptions"
+            label="Status"
+            outer-classes="mb-0"
+          />
 
-          <label class="block">
-            <span
-              class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-text-icon"
-            >
-              Region
-            </span>
-            <select v-model="regionFilter" class="input-style">
-              <option
-                v-for="region in regionOptions"
-                :key="region"
-                :value="region"
-              >
-                {{ region }}
-              </option>
-            </select>
-          </label>
+          <UiInputDropdown
+            name="operations-region-filter"
+            v-model="regionFilter"
+            :options="regionOptions"
+            label="Region"
+            outer-classes="mb-0"
+          />
 
-          <label class="flex items-end pb-2">
-            <span
-              class="inline-flex items-center gap-3 rounded-[14px] border border-border-primary bg-slate-50 px-4 py-3 text-sm text-text-primary"
+          <div class="flex items-end pb-2 mt-5">
+            <div
+              class="rounded-[14px] border border-border-primary bg-slate-50 px-4 py-3"
             >
-              <input
+              <UiInputSwitch
+                name="operations-flagged-only"
                 v-model="flaggedOnly"
-                type="checkbox"
-                class="h-4 w-4 accent-slate-900"
+                label="Flagged only"
+                outer-classes="mb-0"
               />
-              Flagged only
-            </span>
-          </label>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -430,18 +415,12 @@ async function copyFilteredLink() {
           </div>
           <div class="flex items-center gap-3 text-sm text-text-secondary">
             <span>{{ filteredRows.length }} matching records</span>
-            <select
+            <UiInputDropdown
+              name="operations-page-size"
               v-model="pageSize"
-              class="rounded-xl border border-border-primary bg-white px-3 py-2 text-sm text-text-primary shadow-sm"
-            >
-              <option
-                v-for="option in pageSizeOptions"
-                :key="option"
-                :value="option"
-              >
-                {{ option }} / page
-              </option>
-            </select>
+              :options="pageSizeOptions"
+              outer-classes="mb-0"
+            />
           </div>
         </div>
 
