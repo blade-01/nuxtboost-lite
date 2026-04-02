@@ -2,6 +2,7 @@ import type { EventHandler } from "h3";
 import { NuxtAuthHandler } from "#auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import ApiRoutes from "~~/constant/ApiRoutes";
+import useErrorMessage from "~/composables/useErrorMessage";
 import type { AuthUserDataResponse } from "~/types/AuthUser";
 import type { SignInResponse } from "~/types/SigninResponse";
 
@@ -16,13 +17,6 @@ const apiFetch = async <T>(
     ...options,
   });
 };
-
-const getErrorMessage = (error: any) =>
-  error?.data?.message ||
-  error?.response?._data?.message ||
-  error?.statusMessage ||
-  error?.message ||
-  "Unable to sign in";
 
 const getErrorStatusCode = (error: any) =>
   error?.statusCode || error?.status || error?.response?.status || 500;
@@ -90,8 +84,10 @@ const authHandler = NuxtAuthHandler({
             accessToken,
           };
         } catch (error: any) {
+          const { getErrorMessage } = useErrorMessage();
+
           throw createError({
-            message: getErrorMessage(error),
+            message: getErrorMessage(error, "Unable to sign in"),
             statusCode: getErrorStatusCode(error),
           });
         }
