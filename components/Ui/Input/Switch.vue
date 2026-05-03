@@ -21,7 +21,14 @@ const emit = defineEmits<{
 }>();
 
 const hasExternalModel = computed(() => {
-  return !!instance?.vnode.props && "modelValue" in instance.vnode.props;
+  if (!instance?.vnode.props) {
+    return false;
+  }
+
+  return (
+    "modelValue" in instance.vnode.props ||
+    "onUpdate:modelValue" in instance.vnode.props
+  );
 });
 
 const getResolvedValue = (value: unknown) => {
@@ -34,10 +41,7 @@ const toggleValue = (
 ) => {
   const nextValue = !getResolvedValue(currentValue);
   handleChange(nextValue);
-
-  if (hasExternalModel.value) {
-    emit("update:modelValue", nextValue);
-  }
+  emit("update:modelValue", nextValue);
 };
 </script>
 
