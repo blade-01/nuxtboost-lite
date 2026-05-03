@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import UiBtn from "~/components/Ui/Btn/index.vue";
+import { truncateString, capitalizeFirstLetter } from "~/utils";
 defineEmits(["toggleSidebar"]);
 const { tooltipStyle } = usePvStyle();
 const { toggleSidebar, nav } = inject("collapsible") as {
