@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { formatDate, getStatusBadge } from "~/utils";
 const { toast, modal } = useAppFeedback();
 definePageMeta({
   layout: "dashboard",
@@ -198,19 +199,24 @@ function requestDelete(itemId: string) {
           </div>
           <UiDataTable :headers="headers" :items="items">
             <template #actions="item">
-              <div class="flex space-x-2">
-                <UiBtn
-                  class="btn-btn-primary grid h-8 w-8 place-content-center !p-0"
-                >
-                  <Icon name="bx:edit" size="16" />
-                </UiBtn>
-                <UiBtn
-                  class="btn-btn-primary grid h-8 w-8 place-content-center !p-0"
-                  @click="requestDelete(item._id)"
-                >
-                  <Icon name="bx:trash" size="16" />
-                </UiBtn>
-              </div>
+              <UiMenuAction
+                :items="[
+                  {
+                    label: 'Edit',
+                    icon: 'bx:edit',
+                    command: () => {
+                      toast.info(`Edit action on ${item.name}`);
+                    },
+                  },
+                  {
+                    label: 'Delete',
+                    icon: 'bx:trash',
+                    command: () => {
+                      requestDelete(item._id);
+                    },
+                  },
+                ]"
+              />
             </template>
           </UiDataTable>
         </section>
@@ -232,9 +238,10 @@ function requestDelete(itemId: string) {
           </div>
           <UiDataTable :headers="headers" :items="items">
             <template #status="item">
-              <span class="badge" :class="getStatusBadge(item.status)">{{
-                item?.status
-              }}</span>
+              <UiStatus
+                :label="item.status"
+                :tone="item.status.toLowerCase()"
+              />
             </template>
             <template #created_at="item">
               <span>{{
@@ -280,6 +287,12 @@ function requestDelete(itemId: string) {
             selectable
             v-model:selected-items="selectedItems"
           >
+            <template #status="item">
+              <UiStatus
+                :label="item.status"
+                :tone="item.status.toLowerCase()"
+              />
+            </template>
             <template #actions="item">
               <div class="flex space-x-2">
                 <UiBtn
@@ -320,6 +333,12 @@ function requestDelete(itemId: string) {
             v-model:selected-items="selectedItems"
             sticky-first-column
           >
+            <template #status="item">
+              <UiStatus
+                :label="item.status"
+                :tone="item.status.toLowerCase()"
+              />
+            </template>
             <template #actions="item">
               <div class="flex space-x-2">
                 <UiBtn
@@ -359,6 +378,12 @@ function requestDelete(itemId: string) {
             @row-click="handleRowClick"
             row-classes="cursor-pointer"
           >
+            <template #status="item">
+              <UiStatus
+                :label="item.status"
+                :tone="item.status.toLowerCase()"
+              />
+            </template>
             <template #actions="item">
               <div class="flex space-x-2">
                 <UiBtn
