@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import type { FilterField } from "~/components/FilterPanel.vue";
+import {
+  createDateRangeFilter,
+  type UrlDateRange,
+} from "~/composables/useUrlFilters";
+import dayjs from "dayjs";
+import { formatCurrency, showRelativeTime, getStatusBadge } from "~/utils";
+
 definePageMeta({
   layout: "dashboard",
   middleware: "role-access",
@@ -127,56 +135,25 @@ const tableHeaders = [
 
 const isLoading = ref(false);
 const { toast } = useAppFeedback();
+const queueDateRangeFilter = createDateRangeFilter();
+const manualDateRangeFilter = createDateRangeFilter();
 
-const { filters, resetFilters, shareUrl } = useUrlFilters({
-  search: {
-    default: "",
-    parse: (value) => (Array.isArray(value) ? value[0] || "" : value || ""),
-  },
+const { filters, filterModel, resetFilters, shareUrl } = useUrlFilters({
+  search: "",
   status: {
     default: "All" as SettlementStatus | "All",
-    parse: (value) => {
-      const normalized = Array.isArray(value) ? value[0] : value;
-      const allowedValues = [
-        "All",
-        "Queued",
-        "Review",
-        "Processing",
-        "Completed",
-      ];
-      return allowedValues.includes(normalized || "")
-        ? (normalized as SettlementStatus | "All")
-        : "All";
-    },
+    oneOf: ["All", "Queued", "Review", "Processing", "Completed"],
   },
-  region: {
-    default: "All",
-    parse: (value) =>
-      Array.isArray(value) ? value[0] || "All" : value || "All",
-  },
-  flagged: {
-    default: false,
-    parse: (value) => {
-      const normalized = Array.isArray(value) ? value[0] : value;
-      return normalized === "true" || normalized === "1";
-    },
-    serialize: (value) => (value ? "true" : undefined),
-  },
+  region: "All",
+  flagged: false,
+  dateRange: queueDateRangeFilter,
   page: {
     default: 1,
-    parse: (value) => {
-      const normalized = Number(Array.isArray(value) ? value[0] : value);
-      return Number.isFinite(normalized) && normalized > 0 ? normalized : 1;
-    },
-    serialize: (value, defaultValue) =>
-      value === defaultValue ? undefined : String(value),
+    min: 1,
   },
   pageSize: {
     default: 5,
-    parse: (value) => {
-      const normalized = Number(Array.isArray(value) ? value[0] : value);
-      return normalized === 10 ? 10 : 5;
-    },
+    oneOf: [5, 10],
   },
 });
 
@@ -185,6 +162,7 @@ const {
   status: statusFilter,
   region: regionFilter,
   flagged: flaggedOnly,
+  dateRange,
   page,
   pageSize,
 } = filters;
@@ -202,8 +180,96 @@ const regionOptions = computed(() => [
   ...new Set(allRows.value.map((item) => item.region)),
 ]);
 
+const filterFields = computed<FilterField[]>(() => [
+  {
+    key: "search",
+    type: "text",
+    label: "Search",
+    placeholder: "Search merchant, owner, or settlement ID",
+  },
+  {
+    key: "status",
+    type: "select",
+    label: "Status",
+    options: statusOptions,
+  },
+  {
+    key: "region",
+    type: "select",
+    label: "Region",
+    options: regionOptions.value,
+  },
+  {
+    key: "flagged",
+    type: "switch",
+    label: "Flagged only",
+  },
+  {
+    key: "dateRange",
+    type: "date-range",
+    label: "Updated between",
+  },
+]);
+
+const {
+  filterModel: manualFilterModel,
+  applyFilters: applyManualFilters,
+  resetFilters: resetManualFilters,
+  apiQuery: manualApiQuery,
+  shareUrl: manualShareUrl,
+} = useUrlFilters(
+  {
+    manualSearch: "",
+    manualStatus: {
+      default: "All" as SettlementStatus | "All",
+      oneOf: ["All", "Queued", "Review", "Processing", "Completed"],
+    },
+    manualFlagged: false,
+    manualDateRange: manualDateRangeFilter,
+  },
+  {
+    mode: "manual",
+    queryMap: {
+      manualSearch: "merchant_search",
+      manualStatus: (value) => (value === "All" ? {} : { status: value }),
+      manualFlagged: "flagged_only",
+      manualDateRange: (value) =>
+        manualDateRangeFilter.toApiQuery(value as UrlDateRange, {
+          from: "updated_from",
+          to: "updated_to",
+        }),
+    },
+  },
+);
+
+const manualFilterFields = computed<FilterField[]>(() => [
+  {
+    key: "manualSearch",
+    type: "text",
+    label: "Search",
+    placeholder: "Stage local filters before submit",
+  },
+  {
+    key: "manualStatus",
+    type: "select",
+    label: "Status",
+    options: statusOptions,
+  },
+  {
+    key: "manualFlagged",
+    type: "switch",
+    label: "Flagged only",
+  },
+  {
+    key: "manualDateRange",
+    type: "date-range",
+    label: "Updated between",
+  },
+]);
+
 const filteredRows = computed(() => {
   return allRows.value.filter((item) => {
+    const updatedAt = dayjs(item.updated_at);
     const matchesSearch =
       !search.value ||
       [item.merchant, item.owner, item._id]
@@ -215,8 +281,21 @@ const filteredRows = computed(() => {
     const matchesRegion =
       regionFilter.value === "All" || item.region === regionFilter.value;
     const matchesFlagged = !flaggedOnly.value || item.flagged;
+    const matchesDateRange =
+      (!dateRange.value?.from ||
+        updatedAt.isSame(dayjs(dateRange.value.from), "day") ||
+        updatedAt.isAfter(dayjs(dateRange.value.from), "day")) &&
+      (!dateRange.value?.to ||
+        updatedAt.isSame(dayjs(dateRange.value.to), "day") ||
+        updatedAt.isBefore(dayjs(dateRange.value.to), "day"));
 
-    return matchesSearch && matchesStatus && matchesRegion && matchesFlagged;
+    return (
+      matchesSearch &&
+      matchesStatus &&
+      matchesRegion &&
+      matchesFlagged &&
+      matchesDateRange
+    );
   });
 });
 
@@ -264,9 +343,13 @@ const summaryCards = computed(() => {
   ];
 });
 
-watch([search, statusFilter, regionFilter, flaggedOnly, pageSize], () => {
-  page.value = 1;
-});
+watch(
+  [search, statusFilter, regionFilter, flaggedOnly, dateRange, pageSize],
+  () => {
+    page.value = 1;
+  },
+  { deep: true },
+);
 
 watch(totalPages, (value) => {
   if (page.value > value) {
@@ -276,6 +359,37 @@ watch(totalPages, (value) => {
 
 function clearFilters() {
   resetFilters();
+}
+
+function syncManualFiltersToLive() {
+  filterModel.value = {
+    ...filterModel.value,
+    search: manualFilterModel.value.manualSearch,
+    status: manualFilterModel.value.manualStatus,
+    flagged: manualFilterModel.value.manualFlagged,
+    dateRange: manualFilterModel.value.manualDateRange,
+  };
+}
+
+async function submitManualFilters() {
+  await applyManualFilters();
+  syncManualFiltersToLive();
+  toast.success("Manual filters applied");
+}
+
+async function handleResetManualFilters() {
+  await resetManualFilters();
+  syncManualFiltersToLive();
+  await applyManualFilters();
+  toast.info("Manual filters reset");
+}
+
+function formatDateRange(value: UrlDateRange | undefined) {
+  if (!value?.from && !value?.to) {
+    return "No range selected";
+  }
+
+  return [value?.from || "Any", value?.to || "Any"].join(" -> ");
 }
 
 function toggleLoadingState() {
@@ -354,47 +468,105 @@ async function copyFilteredLink() {
         </article>
       </section>
 
-      <section
-        class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
-      >
-        <div class="grid gap-4 lg:grid-cols-[1.4fr_0.8fr_0.8fr_auto]">
-          <UiInputField
-            name="operations-search"
-            v-model="search"
-            label="Search"
-            outer-classes="mb-0"
-            placeholder="Search merchant, owner, or settlement ID"
-          />
-
-          <UiInputDropdown
-            name="operations-status-filter"
-            v-model="statusFilter"
-            :options="statusOptions"
-            label="Status"
-            outer-classes="mb-0"
-          />
-
-          <UiInputDropdown
-            name="operations-region-filter"
-            v-model="regionFilter"
-            :options="regionOptions"
-            label="Region"
-            outer-classes="mb-0"
-          />
-
-          <div class="flex items-end pb-2 mt-5">
-            <div
-              class="rounded-[14px] border border-border-primary bg-slate-50 px-4 py-3"
+      <section class="grid gap-5">
+        <div class="space-y-4">
+          <div>
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
             >
-              <UiInputSwitch
-                name="operations-flagged-only"
-                v-model="flaggedOnly"
-                label="Flagged only"
-                outer-classes="mb-0"
+              Auto Filters
+            </p>
+            <h3 class="mt-2 text-2xl font-semibold text-text-primary">
+              Updates the URL immediately as filters change.
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-text-secondary">
+              This is the standard NuxtBoost flow for searchable list pages.
+              Search, select, switch, and date range changes all sync directly
+              into the route.
+            </p>
+          </div>
+
+          <FilterPanel v-model="filterModel" :fields="filterFields" />
+        </div>
+
+        <section
+          class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
+        >
+          <div>
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
+            >
+              Manual Filters
+            </p>
+            <h3 class="mt-2 text-2xl font-semibold text-text-primary">
+              Keeps local state until submit.
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-text-secondary">
+              Use manual mode when filters sit inside a form and the user should
+              decide when the URL changes.
+            </p>
+          </div>
+
+          <form class="mt-5 space-y-4" @submit.prevent="submitManualFilters">
+            <FilterPanel
+              v-model="manualFilterModel"
+              :fields="manualFilterFields"
+            />
+
+            <div class="flex flex-wrap gap-3">
+              <UiBtn label="Apply manual filters" type="submit" size="sm" />
+              <UiBtn
+                label="Reset draft"
+                type="button"
+                size="sm"
+                class="btn-default"
+                @click="handleResetManualFilters"
               />
             </div>
+          </form>
+
+          <div
+            class="mt-5 grid gap-3 rounded-2xl border border-border-primary bg-slate-50/80 p-4 text-sm text-text-secondary"
+          >
+            <div>
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.2em] text-text-icon"
+              >
+                Draft Range
+              </p>
+              <p class="mt-2 text-text-primary">
+                {{
+                  formatDateRange(
+                    manualFilterModel.manualDateRange as
+                      | UrlDateRange
+                      | undefined,
+                  )
+                }}
+              </p>
+            </div>
+            <div>
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.2em] text-text-icon"
+              >
+                Applied Share URL
+              </p>
+              <p class="mt-2 break-all text-text-primary">
+                {{ manualShareUrl }}
+              </p>
+            </div>
+            <div>
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.2em] text-text-icon"
+              >
+                API Query Preview
+              </p>
+              <pre
+                class="mt-2 overflow-x-auto rounded-xl bg-slate-900 px-4 py-3 text-xs text-slate-100"
+                >{{ JSON.stringify(manualApiQuery, null, 2) }}</pre
+              >
+            </div>
           </div>
-        </div>
+        </section>
       </section>
 
       <section
@@ -417,9 +589,10 @@ async function copyFilteredLink() {
             <span>{{ filteredRows.length }} matching records</span>
             <UiInputDropdown
               name="operations-page-size"
-              v-model="pageSize"
+              :model-value="pageSize"
               :options="pageSizeOptions"
               outer-classes="mb-0"
+              @update:modelValue="pageSize = Number($event)"
             />
           </div>
         </div>
