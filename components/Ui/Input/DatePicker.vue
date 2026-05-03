@@ -5,6 +5,8 @@ defineOptions({
   inheritAttrs: false,
 });
 
+const instance = getCurrentInstance();
+
 const props = defineProps<{
   name: string;
   label?: string;
@@ -20,7 +22,23 @@ const props = defineProps<{
   showTime?: boolean;
   timeOnly?: boolean;
   hourFormat?: "12" | "24";
+  modelValue?: unknown;
 }>();
+
+const emit = defineEmits<{
+  "update:modelValue": [value: unknown];
+}>();
+
+const hasExternalModel = computed(() => {
+  if (!instance?.vnode.props) {
+    return false;
+  }
+
+  return (
+    "modelValue" in instance.vnode.props ||
+    "onUpdate:modelValue" in instance.vnode.props
+  );
+});
 
 const forwardedProps = computed(() => ({
   multiDates: props.selectionMode === "multiple",
@@ -73,8 +91,13 @@ const datePickerProps = computed(() => ({
       </button>
       <ClientOnly>
         <VueDatePicker
-          :model-value="value"
-          @update:modelValue="handleChange"
+          :model-value="hasExternalModel ? props.modelValue : value"
+          @update:modelValue="
+            (nextValue: any) => {
+              handleChange(nextValue);
+              emit('update:modelValue', nextValue);
+            }
+          "
           v-bind="datePickerProps"
           auto-apply
           :clearable="true"
@@ -140,7 +163,7 @@ const datePickerProps = computed(() => ({
 }
 
 :deep(.datepicker-input) {
-  @apply app-control-shell app-control-input relative flex items-center focus:border-slate-400 focus:ring-4 focus:ring-slate-200/70;
+  @apply !min-h-[44px] !rounded-[10px] border border-border-primary bg-white/90 text-text-primary shadow-sm shadow-slate-200/40 transition-all duration-200 ease-in-out  px-4 py-3 text-sm outline-none ring-0 placeholder:text-placeholder-primary relative flex items-center focus:border-slate-400 focus:ring-4 focus:ring-slate-200/70;
 }
 
 :deep(.datepicker-input-error) {
@@ -158,6 +181,6 @@ const datePickerProps = computed(() => ({
 :deep(
   .dp__pointer.dp__input_readonly.dp__input.dp__input_icon_pad.dp__input_reg
 ) {
-  @apply app-control-shape;
+  @apply !min-h-[44px] !rounded-[10px];
 }
 </style>
