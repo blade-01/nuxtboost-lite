@@ -216,6 +216,31 @@ export default () => {
     };
   });
 
+  const menuStyle = computed(() => {
+    return {
+      root: {
+        class: overlayClass,
+      },
+      list: {
+        class: "!p-0",
+      },
+      item: {
+        class: "group",
+      },
+      itemContent: {
+        class:
+          "rounded-[10px] transition hover:bg-[#F6F3EE] focus-within:bg-[#F6F3EE]",
+      },
+      action: {
+        class:
+          "flex w-full items-center rounded-[10px] px-3 py-2 text-left text-sm font-medium text-text-primary",
+      },
+      label: {
+        class: "text-inherit",
+      },
+    };
+  });
+
   return {
     dropdownStyle,
     multiSelectStyle,
@@ -226,5 +251,6 @@ export default () => {
     editorStyle,
     dialogStyle,
     tooltipStyle,
+    menuStyle,
   };
 };
