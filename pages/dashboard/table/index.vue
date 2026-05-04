@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { formatDate, getStatusBadge } from "~/utils";
+import { formatDate } from "~/utils";
 const { toast, modal } = useAppFeedback();
 definePageMeta({
   layout: "dashboard",
