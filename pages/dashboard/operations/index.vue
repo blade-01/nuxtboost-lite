@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { FilterField } from "~/components/FilterPanel.vue";
 import {
   createDateRangeFilter,
   type UrlDateRange,
@@ -29,6 +28,14 @@ type OperationRow = {
   volume: number;
   transactions: number;
   updated_at: string;
+};
+
+type AppliedFilterState = {
+  search: string;
+  status: SettlementStatus | "All";
+  region: string;
+  flagged: boolean;
+  dateRange: UrlDateRange;
 };
 
 const allRows = ref<OperationRow[]>([
@@ -135,37 +142,6 @@ const tableHeaders = [
 
 const isLoading = ref(false);
 const { toast } = useAppFeedback();
-const queueDateRangeFilter = createDateRangeFilter();
-const manualDateRangeFilter = createDateRangeFilter();
-
-const { filters, filterModel, resetFilters, shareUrl } = useUrlFilters({
-  search: "",
-  status: {
-    default: "All" as SettlementStatus | "All",
-    oneOf: ["All", "Queued", "Review", "Processing", "Completed"],
-  },
-  region: "All",
-  flagged: false,
-  dateRange: queueDateRangeFilter,
-  page: {
-    default: 1,
-    min: 1,
-  },
-  pageSize: {
-    default: 5,
-    oneOf: [5, 10],
-  },
-});
-
-const {
-  search,
-  status: statusFilter,
-  region: regionFilter,
-  flagged: flaggedOnly,
-  dateRange,
-  page,
-  pageSize,
-} = filters;
 
 const pageSizeOptions = [5, 10];
 const statusOptions: Array<SettlementStatus | "All"> = [
@@ -180,114 +156,122 @@ const regionOptions = computed(() => [
   ...new Set(allRows.value.map((item) => item.region)),
 ]);
 
-const filterFields = computed<FilterField[]>(() => [
-  {
-    key: "search",
-    type: "text",
-    label: "Search",
-    placeholder: "Search merchant, owner, or settlement ID",
-  },
-  {
-    key: "status",
-    type: "select",
-    label: "Status",
-    options: statusOptions,
-  },
-  {
-    key: "region",
-    type: "select",
-    label: "Region",
-    options: regionOptions.value,
-  },
-  {
-    key: "flagged",
-    type: "switch",
-    label: "Flagged only",
-  },
-  {
-    key: "dateRange",
-    type: "date-range",
-    label: "Updated between",
-  },
-]);
-
-const {
-  filterModel: manualFilterModel,
-  applyFilters: applyManualFilters,
-  resetFilters: resetManualFilters,
-  apiQuery: manualApiQuery,
-  shareUrl: manualShareUrl,
-} = useUrlFilters(
-  {
-    manualSearch: "",
-    manualStatus: {
-      default: "All" as SettlementStatus | "All",
-      oneOf: ["All", "Queued", "Review", "Processing", "Completed"],
-    },
-    manualFlagged: false,
-    manualDateRange: manualDateRangeFilter,
-  },
-  {
-    mode: "manual",
-    queryMap: {
-      manualSearch: "merchant_search",
-      manualStatus: (value) => (value === "All" ? {} : { status: value }),
-      manualFlagged: "flagged_only",
-      manualDateRange: (value) =>
-        manualDateRangeFilter.toApiQuery(value as UrlDateRange, {
-          from: "updated_from",
-          to: "updated_to",
-        }),
-    },
-  },
-);
-
-const manualFilterFields = computed<FilterField[]>(() => [
-  {
-    key: "manualSearch",
-    type: "text",
+const filterSchema = computed(() => ({
+  search: {
+    type: "text" as const,
+    default: "",
     label: "Search",
     placeholder: "Stage local filters before submit",
+    query: "search",
   },
-  {
-    key: "manualStatus",
-    type: "select",
+  status: {
+    type: "select" as const,
+    default: "All" as SettlementStatus | "All",
     label: "Status",
     options: statusOptions,
+    props: {
+      showClear: true,
+    },
+    oneOf: statusOptions,
+    query: (value: SettlementStatus | "All") =>
+      value === "All" ? {} : { status: value },
   },
-  {
-    key: "manualFlagged",
-    type: "switch",
+  region: {
+    type: "select" as const,
+    default: "All",
+    label: "Region",
+    options: regionOptions.value,
+    props: {
+      showClear: true,
+    },
+    oneOf: regionOptions.value,
+  },
+  flagged: {
+    type: "switch" as const,
+    default: false,
     label: "Flagged only",
+    query: "flagged_only",
   },
-  {
-    key: "manualDateRange",
-    type: "date-range",
+  dateRange: createDateRangeFilter({
     label: "Updated between",
+    queryKeys: {
+      from: "updated_from",
+      to: "updated_to",
+    },
+  }),
+  page: {
+    type: "number" as const,
+    default: 1,
+    min: 1,
+    showInFilterPanel: false,
   },
-]);
+  pageSize: {
+    type: "select" as const,
+    default: 5,
+    options: pageSizeOptions,
+    oneOf: pageSizeOptions,
+    showInFilterPanel: false,
+  },
+}));
+
+const {
+  filters,
+  filterModel,
+  fields,
+  applyFilters,
+  resetFilters,
+  apiQuery,
+  shareUrl,
+} = useUrlFilters(filterSchema, {
+  mode: "manual",
+});
+
+const {
+  search,
+  status: statusFilter,
+  region: regionFilter,
+  flagged: flaggedOnly,
+  dateRange,
+  page,
+  pageSize,
+} = filters;
+
+const createAppliedFilterState = (): AppliedFilterState => ({
+  search: search.value,
+  status: statusFilter.value,
+  region: regionFilter.value,
+  flagged: flaggedOnly.value,
+  dateRange: {
+    from: dateRange.value.from,
+    to: dateRange.value.to,
+  },
+});
+
+const appliedFilters = ref<AppliedFilterState>(createAppliedFilterState());
 
 const filteredRows = computed(() => {
   return allRows.value.filter((item) => {
     const updatedAt = dayjs(item.updated_at);
     const matchesSearch =
-      !search.value ||
+      !appliedFilters.value.search ||
       [item.merchant, item.owner, item._id]
         .join(" ")
         .toLowerCase()
-        .includes(search.value.toLowerCase());
+        .includes(appliedFilters.value.search.toLowerCase());
     const matchesStatus =
-      statusFilter.value === "All" || item.status === statusFilter.value;
+      appliedFilters.value.status === "All" ||
+      item.status === appliedFilters.value.status;
     const matchesRegion =
-      regionFilter.value === "All" || item.region === regionFilter.value;
-    const matchesFlagged = !flaggedOnly.value || item.flagged;
+      appliedFilters.value.region === "All" ||
+      item.region === appliedFilters.value.region;
+    const matchesFlagged = !appliedFilters.value.flagged || item.flagged;
     const matchesDateRange =
-      (!dateRange.value?.from ||
-        updatedAt.isSame(dayjs(dateRange.value.from), "day") ||
-        updatedAt.isAfter(dayjs(dateRange.value.from), "day")) &&
-      (!dateRange.value?.to ||
-        updatedAt.isSame(dayjs(dateRange.value.to), "day") ||
-        updatedAt.isBefore(dayjs(dateRange.value.to), "day"));
+      (!appliedFilters.value.dateRange.from ||
+        updatedAt.isSame(dayjs(appliedFilters.value.dateRange.from), "day") ||
+        updatedAt.isAfter(dayjs(appliedFilters.value.dateRange.from), "day")) &&
+      (!appliedFilters.value.dateRange.to ||
+        updatedAt.isSame(dayjs(appliedFilters.value.dateRange.to), "day") ||
+        updatedAt.isBefore(dayjs(appliedFilters.value.dateRange.to), "day"));
 
     return (
       matchesSearch &&
@@ -344,7 +328,7 @@ const summaryCards = computed(() => {
 });
 
 watch(
-  [search, statusFilter, regionFilter, flaggedOnly, dateRange, pageSize],
+  [appliedFilters, pageSize],
   () => {
     page.value = 1;
   },
@@ -357,31 +341,15 @@ watch(totalPages, (value) => {
   }
 });
 
-function clearFilters() {
-  resetFilters();
+async function submitFilters() {
+  await applyFilters();
+  appliedFilters.value = createAppliedFilterState();
 }
 
-function syncManualFiltersToLive() {
-  filterModel.value = {
-    ...filterModel.value,
-    search: manualFilterModel.value.manualSearch,
-    status: manualFilterModel.value.manualStatus,
-    flagged: manualFilterModel.value.manualFlagged,
-    dateRange: manualFilterModel.value.manualDateRange,
-  };
-}
-
-async function submitManualFilters() {
-  await applyManualFilters();
-  syncManualFiltersToLive();
-  toast.success("Manual filters applied");
-}
-
-async function handleResetManualFilters() {
-  await resetManualFilters();
-  syncManualFiltersToLive();
-  await applyManualFilters();
-  toast.info("Manual filters reset");
+async function handleResetFilters() {
+  await resetFilters();
+  appliedFilters.value = createAppliedFilterState();
+  await applyFilters();
 }
 
 function formatDateRange(value: UrlDateRange | undefined) {
@@ -407,7 +375,6 @@ async function copyFilteredLink() {
 
   if (import.meta.client && navigator.clipboard) {
     await navigator.clipboard.writeText(valueToCopy);
-    toast.success("Filtered link copied");
     return;
   }
 
@@ -443,7 +410,7 @@ async function copyFilteredLink() {
             label="Clear filters"
             size="sm"
             class="btn-default"
-            @click="clearFilters"
+            @click="handleResetFilters"
           />
         </div>
       </DashboardPageHero>
@@ -469,26 +436,6 @@ async function copyFilteredLink() {
       </section>
 
       <section class="grid gap-5">
-        <div class="space-y-4">
-          <div>
-            <p
-              class="text-xs font-semibold uppercase tracking-[0.24em] text-text-icon"
-            >
-              Auto Filters
-            </p>
-            <h3 class="mt-2 text-2xl font-semibold text-text-primary">
-              Updates the URL immediately as filters change.
-            </h3>
-            <p class="mt-2 text-sm leading-6 text-text-secondary">
-              This is the standard NuxtBoost flow for searchable list pages.
-              Search, select, switch, and date range changes all sync directly
-              into the route.
-            </p>
-          </div>
-
-          <FilterPanel v-model="filterModel" :fields="filterFields" />
-        </div>
-
         <section
           class="rounded-[26px] border border-border-primary bg-white/85 p-6 shadow-sm shadow-slate-200/70"
         >
@@ -499,28 +446,26 @@ async function copyFilteredLink() {
               Manual Filters
             </p>
             <h3 class="mt-2 text-2xl font-semibold text-text-primary">
-              Keeps local state until submit.
+              Keep local state until submit.
             </h3>
             <p class="mt-2 text-sm leading-6 text-text-secondary">
-              Use manual mode when filters sit inside a form and the user should
-              decide when the URL changes.
+              This page now uses the schema-driven manual flow only. Filters
+              update the table immediately, while the URL changes only when the
+              user clicks apply.
             </p>
           </div>
 
-          <form class="mt-5 space-y-4" @submit.prevent="submitManualFilters">
-            <FilterPanel
-              v-model="manualFilterModel"
-              :fields="manualFilterFields"
-            />
+          <form class="mt-5 space-y-4" @submit.prevent="submitFilters">
+            <UiDataFilterPanel v-model="filterModel" :fields="fields" />
 
             <div class="flex flex-wrap gap-3">
-              <UiBtn label="Apply manual filters" type="submit" size="sm" />
+              <UiBtn label="Apply filters" type="submit" size="sm" />
               <UiBtn
-                label="Reset draft"
+                label="Reset filters"
                 type="button"
                 size="sm"
                 class="btn-default"
-                @click="handleResetManualFilters"
+                @click="handleResetFilters"
               />
             </div>
           </form>
@@ -535,13 +480,7 @@ async function copyFilteredLink() {
                 Draft Range
               </p>
               <p class="mt-2 text-text-primary">
-                {{
-                  formatDateRange(
-                    manualFilterModel.manualDateRange as
-                      | UrlDateRange
-                      | undefined,
-                  )
-                }}
+                {{ formatDateRange(dateRange) }}
               </p>
             </div>
             <div>
@@ -551,18 +490,18 @@ async function copyFilteredLink() {
                 Applied Share URL
               </p>
               <p class="mt-2 break-all text-text-primary">
-                {{ manualShareUrl }}
+                {{ shareUrl }}
               </p>
             </div>
             <div>
               <p
                 class="text-xs font-semibold uppercase tracking-[0.2em] text-text-icon"
               >
-                API Query Preview
+                Draft API Query Preview
               </p>
               <pre
                 class="mt-2 overflow-x-auto rounded-xl bg-slate-900 px-4 py-3 text-xs text-slate-100"
-                >{{ JSON.stringify(manualApiQuery, null, 2) }}</pre
+                >{{ JSON.stringify(apiQuery, null, 2) }}</pre
               >
             </div>
           </div>
@@ -635,7 +574,7 @@ async function copyFilteredLink() {
             label="Reset filters"
             size="sm"
             class="mt-5"
-            @click="clearFilters"
+            @click="handleResetFilters"
           />
         </div>
 
